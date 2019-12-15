@@ -1,0 +1,13 @@
+{
+    "require": {
+        "longman/telegram-bot": "^0.61.1",
+        "vlucas/phpdotenv": "^4.1",
+        "monolog/monolog": "^2.0",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "USD2UAH\\": "app/"
+        }
+    }
+}
