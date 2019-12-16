@@ -1,6 +1,6 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace Longman\TelegramBot\Commands\AdminCommands;
 
 use \Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Request;
