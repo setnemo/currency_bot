@@ -23,11 +23,12 @@ try {
     $logger = new Monolog\Logger('asterios-bot');
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/app.log', Logger::ERROR));
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
-    $telegram->addCommandsPaths($commands_paths);
     $redis = new Predis\Client();
     $hookRegistrator = new USD2UAH\BotRegistrator($telegram, $redis, $logger);
     $hookRegistrator->register();
     Longman\TelegramBot\TelegramLog::initialize($logger);
+    $telegram->enableAdmin(getenv('ADMIN'));
+    $telegram->addCommandsPaths($commands_paths);
     $telegram->enableMySql($mysql_credentials);
     $telegram->enableLimiter();
     $telegram->handle();
