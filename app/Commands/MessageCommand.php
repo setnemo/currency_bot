@@ -10,7 +10,7 @@ use Longman\TelegramBot\Request;
  *
  * Gets executed when a user first starts using the bot.
  */
-class AdminMessageCommand extends AdminCommand
+class MessageCommand extends AdminCommand
 {
     /**
      * @var string
