@@ -27,7 +27,7 @@ try {
     $hookRegistrator = new USD2UAH\BotRegistrator($telegram, $redis, $logger);
     $hookRegistrator->register();
     Longman\TelegramBot\TelegramLog::initialize($logger);
-    $telegram->enableAdmin(getenv('ADMIN'));
+    $telegram->enableAdmin(intval(getenv('ADMIN')));
     $telegram->addCommandsPaths($commands_paths);
     $telegram->enableMySql($mysql_credentials);
     $telegram->enableLimiter();
