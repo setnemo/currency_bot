@@ -39,7 +39,8 @@ class StartCommand extends SystemCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $text    = 'Hi there!' . PHP_EOL . "Usage: type my name and digits to convert USD/UAH, for example `@USD2UAH_bot 1000` in any chat";
+        $text    = 'Hi there!' . PHP_EOL . 'Usage: type my name and digits to convert USD/UAH, for example' . PHP_EOL .
+            '@USD2UAH_bot 1000' . PHP_EOL . 'in any chat';
         $data = [
             'chat_id' => $chat_id,
             'text'    => $text,
