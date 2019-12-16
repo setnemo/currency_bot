@@ -27,7 +27,7 @@ class AdminMessageCommand extends AdminCommand
     /**
      * @var string
      */
-    protected $version = '1.0.0';
+    protected $version = '1.10.10';
     /**
      * @var bool
      */
