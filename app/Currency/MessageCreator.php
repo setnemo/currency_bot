@@ -6,11 +6,13 @@ class MessageCreator
 {
     public static function createDivisionMessage(string $input, string $one, string $two, string $ex)
     {
-        return $input . $one . ' to ' . $two . ': ' . round(floatval($input) / floatval($ex), 2);
+        $result = round(floatval($input) / floatval($ex), 2);
+        return"На {$input}{$one} будет {$result}{$two}";
     }
 
     public static function createMultiplyMessage(string $input, string $one, string $two, string $ex)
     {
-        return $input . $one . ' to ' . $two . ': ' . round(floatval($input) * floatval($ex), 2);
+        $result = round(floatval($input) * floatval($ex), 2);
+        return"За {$input}{$one} будет {$result}{$two}";
     }
 }
