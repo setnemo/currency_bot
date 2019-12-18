@@ -1,7 +1,10 @@
 <?php
+
 namespace Longman\TelegramBot\Commands\SystemCommands;
+
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Request;
+
 /**
  * Start command
  *
@@ -39,11 +42,20 @@ class StartCommand extends SystemCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $text    = 'Hi there!' . PHP_EOL . 'Usage: type my name and digits to convert USD/UAH, for example' . PHP_EOL .
-            '@USD2UAH_bot 1000' . PHP_EOL . 'in any chat';
+        $text    = "
+Привет! Я умею показывать курс валют НБУ, межбанк, средний курс в банках. Информацию я беру на сайте [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=welcome_post)
+
+Так же я умею конвертировать доллар в гривну и наоборот в режиме *инлайн*. Это значит то, что стоит меня упомянуть через @ в любом чате, и я смогу в реальном времени без открытия чата со мной перевести введенную сумму по текущему курсу!
+
+В диалоге со мной можно получить курсы валют командой валюты, это /usd /eur /rub
+
+Если у тебя будут проблемы с моей работой - пиши моему создателю, его контакты есть в описании
+";
         $data = [
             'chat_id' => $chat_id,
             'text'    => $text,
+            'parse_mode' => 'markdown',
+            'disable_web_page_preview' => true,
         ];
         return Request::sendMessage($data);
     }

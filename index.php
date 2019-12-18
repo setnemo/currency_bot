@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Client;
 use Monolog\Logger;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -20,11 +21,11 @@ $mysql_credentials = [
 ];
 
 try {
-    $logger = new Monolog\Logger('asterios-bot');
+    $logger = new Monolog\Logger('bot');
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/app.log', Logger::ERROR));
+    $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/debug.log', Logger::DEBUG));
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
-    $redis = new Predis\Client();
-    $hookRegistrator = new USD2UAH\BotRegistrator($telegram, $redis, $logger);
+    $hookRegistrator = new USD2UAH\BotRegistrator($telegram, $logger);
     $hookRegistrator->register();
     Longman\TelegramBot\TelegramLog::initialize($logger);
     $telegram->enableAdmin(intval(getenv('ADMIN')));
