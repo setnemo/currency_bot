@@ -24,7 +24,7 @@ class RUBCommand extends SystemCommand
     /**
      * @var string
      */
-    protected $usage = '/RUB';
+    protected $usage = 'RUB';
     /**
      * @var string
      */
