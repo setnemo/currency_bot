@@ -11,7 +11,7 @@ use Longman\TelegramBot\Commands\UserCommands\EURCommand;
 
 class GenericmessageCommand extends SystemCommand
 {
-    protected $name = 'Genericmessage';
+    protected $name = 'genericmessage';
     protected $description = 'Handle generic message';
     protected $version = '1.0.0';
 
