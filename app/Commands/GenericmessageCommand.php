@@ -3,10 +3,11 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Commands\UserCommands\HelpCommand;
-use Longman\TelegramBot\Commands\UserCommands\WhoamiCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Commands\SystemCommands\USDCommand;
+use Longman\TelegramBot\Commands\SystemCommands\RUBCommand;
+use Longman\TelegramBot\Commands\SystemCommands\EURCommand;
 
 class GenericmessageCommand extends SystemCommand
 {
