@@ -44,7 +44,7 @@ class KeyboardCommand extends UserCommand
                     'text' => 'EUR'
                 ],
                 [
-                    'text' => 'RUB'
+                    'text' => '/RUB'
                 ],
         ]);
         //Return a random keyboard.
