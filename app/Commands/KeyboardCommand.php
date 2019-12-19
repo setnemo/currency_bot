@@ -38,13 +38,13 @@ class KeyboardCommand extends UserCommand
         /** @var Keyboard $keyboards */
         $keyboards = new Keyboard([
                 [
-                    'text' => 'USD'
+                    'text' => 'USD',  'callback_data' => 'USD'
                 ],
                 [
-                    'text' => 'EUR'
+                    'text' => 'EUR',  'callback_data' => 'EUR'
                 ],
                 [
-                    'text' => 'RUB',  'callback_data' => '/RUB'
+                    'text' => 'RUB',  'callback_data' => 'lol'
                 ],
         ]);
         //Return a random keyboard.
