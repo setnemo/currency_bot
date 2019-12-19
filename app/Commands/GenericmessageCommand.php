@@ -25,17 +25,17 @@ class GenericmessageCommand extends SystemCommand
             if ($text === "USD") {
                 \Longman\TelegramBot\TelegramLog::error('USD');
                 $update['message']['text'] = "/USD";
-                return (new USDCommand($this->telegram, new Update($update)))->execute();
+                return (new USDCommand($this->telegram, new Update($update)))->preExecute();
             }
             if ($text === "RUB") {
                 \Longman\TelegramBot\TelegramLog::error('RUB');
                 $update['message']['text'] = "/RUB";
-                return (new RUBCommand($this->telegram, new Update($update)))->execute();
+                return (new RUBCommand($this->telegram, new Update($update)))->preExecute();
             }
             if ($text === "EUR") {
                 \Longman\TelegramBot\TelegramLog::error('EUR');
                 $update['message']['text'] = "/EUR";
-                return (new EURCommand($this->telegram, new Update($update)))->execute();
+                return (new EURCommand($this->telegram, new Update($update)))->preExecute();
             }
         return Request::emptyResponse();
     }
