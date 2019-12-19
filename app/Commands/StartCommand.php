@@ -55,15 +55,7 @@ class StartCommand extends SystemCommand
 ";
         /** @var Keyboard $keyboards */
         $keyboards = new InlineKeyboard([
-            [
-                'text' => 'USD',  'callback_data' => 'USD'
-            ],
-            [
-                'text' => 'EUR',  'callback_data' => 'EUR'
-            ],
-            [
-                'text' => 'RUB',  'callback_data' => 'lol'
-            ],
+            'USD','EUR','RUB',
         ]);
         $keyboard = $keyboards
             ->setResizeKeyboard(true)
