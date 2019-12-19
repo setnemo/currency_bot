@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 /**
@@ -36,7 +37,7 @@ class KeyboardCommand extends UserCommand
     public function execute()
     {
         /** @var Keyboard $keyboards */
-        $keyboards = new Keyboard([
+        $keyboards = new InlineKeyboard([
                 [
                     'text' => 'USD',  'callback_data' => 'USD'
                 ],
