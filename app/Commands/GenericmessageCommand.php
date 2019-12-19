@@ -26,9 +26,12 @@ class GenericmessageCommand extends SystemCommand
         $text = trim($this->getMessage()->getText(true));
 
         $update = json_decode($this->update->toJson(), true);
-
+        \Longman\TelegramBot\TelegramLog::error('test', $text);
+        \Longman\TelegramBot\TelegramLog::error('test', $update);
         foreach (self::BUTTONS as $button) {
+            \Longman\TelegramBot\TelegramLog::error('while');
             if ($text === $button) {
+                \Longman\TelegramBot\TelegramLog::error('if');
                 $update['message']['text'] = "/{$button}";
                 $command = $button . 'Command';
                 return (new $command($this->telegram, new Update($update)))->preExecute();
