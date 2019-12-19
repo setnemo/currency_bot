@@ -15,12 +15,6 @@ class GenericmessageCommand extends SystemCommand
     protected $description = 'Handle generic message';
     protected $version = '1.0.0';
 
-    protected const BUTTONS = [
-        'USD',
-        'RUB',
-        'EUR',
-    ];
-
     public function execute()
     {
         $text = trim($this->getMessage()->getText(true));
@@ -31,17 +25,17 @@ class GenericmessageCommand extends SystemCommand
             if ($text === "USD") {
                 \Longman\TelegramBot\TelegramLog::error('USD');
                 $update['message']['text'] = "/USD";
-                return (new USDCommand($this->telegram, new Update($update)))->preExecute();
+                return (new USDCommand($this->telegram, new Update($update)))->execute();
             }
             if ($text === "RUB") {
                 \Longman\TelegramBot\TelegramLog::error('RUB');
                 $update['message']['text'] = "/RUB";
-                return (new RUBCommand($this->telegram, new Update($update)))->preExecute();
+                return (new RUBCommand($this->telegram, new Update($update)))->execute();
             }
             if ($text === "EUR") {
                 \Longman\TelegramBot\TelegramLog::error('EUR');
                 $update['message']['text'] = "/EUR";
-                return (new EURCommand($this->telegram, new Update($update)))->preExecute();
+                return (new EURCommand($this->telegram, new Update($update)))->execute();
             }
         return Request::emptyResponse();
     }
