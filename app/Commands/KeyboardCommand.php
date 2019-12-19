@@ -37,7 +37,6 @@ class KeyboardCommand extends UserCommand
     {
         /** @var Keyboard $keyboards */
         $keyboards = new Keyboard([
-            [
                 [
                     'text' => 'USD'
                 ],
@@ -47,7 +46,6 @@ class KeyboardCommand extends UserCommand
                 [
                     'text' => 'RUB'
                 ],
-            ],
         ]);
         //Return a random keyboard.
         $keyboard = $keyboards
