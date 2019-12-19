@@ -36,6 +36,8 @@ class CallbackqueryCommand extends SystemCommand
         $callback_query    = $this->getCallbackQuery();
         $callback_query_id = $callback_query->getId();
         $callback_data     = $callback_query->getData();
+        \Longman\TelegramBot\TelegramLog::error($callback_query, [$callback_query_id]);
+        \Longman\TelegramBot\TelegramLog::error($callback_query, [$callback_data]);
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => "Hello World! {$callback_data}",
