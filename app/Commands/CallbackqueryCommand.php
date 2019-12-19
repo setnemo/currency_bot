@@ -50,7 +50,7 @@ class CallbackqueryCommand extends SystemCommand
             $exchange = (new MinfinApi())->getCurrencyList();
             $text = USDCommand::getExchangeTextUSD($exchange);
             $update = json_decode($this->update->toJson(), true);
-            return $this->telegram->executeCommand("/USD");
+            return $this->telegram->executeCommand("USD");
         }
 
 
