@@ -1,7 +1,7 @@
 <?php
-namespace Longman\TelegramBot\Commands\UserCommands;
+namespace Longman\TelegramBot\Commands\SystemCommands;
 
-use Longman\TelegramBot\Commands\UserCommand;
+use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
@@ -9,7 +9,7 @@ use Longman\TelegramBot\Commands\UserCommands\USDCommand;
 use Longman\TelegramBot\Commands\UserCommands\RUBCommand;
 use Longman\TelegramBot\Commands\UserCommands\EURCommand;
 
-class GenericmessageCommand extends UserCommand
+class GenericmessageCommand extends SystemCommand
 {
     protected $name = 'genericmessage';
     protected $description = 'Handle generic message';
@@ -21,12 +21,12 @@ class GenericmessageCommand extends UserCommand
 
         $update = json_decode($this->update->toJson(), true);
         $conversation = new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), $this->getName());
-        \Longman\TelegramBot\TelegramLog::error('test', $text);
-        \Longman\TelegramBot\TelegramLog::error('test', $update);
+        \Longman\TelegramBot\TelegramLog::error('test', [$text]);
+        \Longman\TelegramBot\TelegramLog::error('test', [$update]);
             if ($text === "USD") {
                 \Longman\TelegramBot\TelegramLog::error('USD');
                 $update['message']['text'] = "/USD";
-                return $this->telegram->executeCommand("/USD");
+                return $this->telegram->executeCommand("USD");
             }
         if ($text === "RUB") {
             \Longman\TelegramBot\TelegramLog::error('RUB');
