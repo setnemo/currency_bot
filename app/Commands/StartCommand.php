@@ -3,8 +3,6 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
 /**
@@ -53,21 +51,11 @@ class StartCommand extends SystemCommand
 
 Если у тебя будут проблемы с моей работой - пиши моему создателю, его контакты есть в описании.
 ";
-        /** @var Keyboard $keyboards */
-        $keyboards = new InlineKeyboard([
-            'USD','EUR','RUB',
-        ]);
-        $keyboard = $keyboards
-            ->setResizeKeyboard(true)
-            ->setOneTimeKeyboard(true)
-            ->setSelective(false);
-
         $data = [
             'chat_id' => $chat_id,
             'text'    => $text,
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
-            'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
     }
