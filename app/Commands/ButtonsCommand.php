@@ -1,8 +1,8 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
@@ -12,7 +12,7 @@ use Longman\TelegramBot\Request;
  *
  * Gets executed when a user first starts using the bot.
  */
-class ButtonsCommand extends SystemCommand
+class ButtonsCommand extends UserCommand
 {
     /**
      * @var string
