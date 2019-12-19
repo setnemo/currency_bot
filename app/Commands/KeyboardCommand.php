@@ -35,38 +35,22 @@ class KeyboardCommand extends UserCommand
      */
     public function execute()
     {
-        //Keyboard examples
-        /** @var Keyboard[] $keyboards */
-        $keyboards = [];
-        //Example 0
-        $keyboards[] = new Keyboard(
-            ['7', '8', '9'],
-            ['4', '5', '6'],
-            ['1', '2', '3'],
-            [' ', '0', ' ']
-        );
-        //Example 1
-        $keyboards[] = new Keyboard(
-            ['7', '8', '9', '+'],
-            ['4', '5', '6', '-'],
-            ['1', '2', '3', '*'],
-            [' ', '0', ' ', '/']
-        );
-        //Example 2
-        $keyboards[] = new Keyboard('A', 'B', 'C');
-        //Example 3
-        $keyboards[] = new Keyboard(
-            ['text' => 'A'],
-            'B',
-            ['C', 'D']
-        );
-        //Example 4 (bots version 2.0)
-        $keyboards[] = new Keyboard([
-            ['text' => 'Send my contact', 'request_contact' => true],
-            ['text' => 'Send my location', 'request_location' => true],
+        /** @var Keyboard $keyboards */
+        $keyboards = new Keyboard([
+            [
+                [
+                    'text' => 'USD'
+                ],
+                [
+                    'text' => 'EUR'
+                ],
+                [
+                    'text' => 'RUB'
+                ],
+            ],
         ]);
         //Return a random keyboard.
-        $keyboard = $keyboards[mt_rand(0, count($keyboards) - 1)]
+        $keyboard = $keyboards
             ->setResizeKeyboard(true)
             ->setOneTimeKeyboard(true)
             ->setSelective(false);
