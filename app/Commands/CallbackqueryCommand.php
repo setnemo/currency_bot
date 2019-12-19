@@ -49,6 +49,8 @@ class CallbackqueryCommand extends SystemCommand
             \Longman\TelegramBot\TelegramLog::error('USD');
             $exchange = (new MinfinApi())->getCurrencyList();
             $text = USDCommand::getExchangeTextUSD($exchange);
+            $update = json_decode($this->update->toJson(), true);
+            return (new RUBCommand($this->telegram, new Update($update)))->preExecute();
         }
 
 
