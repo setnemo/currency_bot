@@ -21,25 +21,21 @@ class GenericmessageCommand extends SystemCommand
 
         $update = json_decode($this->update->toJson(), true);
         $conversation = new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), $this->getName());
-        \Longman\TelegramBot\TelegramLog::error('test', [$text]);
-        \Longman\TelegramBot\TelegramLog::error('test', [$update]);
-            if ($text === "USD") {
-                \Longman\TelegramBot\TelegramLog::error('USD');
-                $update['message']['text'] = "/USD";
-                return $this->telegram->executeCommand("USD");
-            }
-        if ($text === "RUB") {
-            \Longman\TelegramBot\TelegramLog::error('RUB');
-            $update['message']['text'] = "/RUB";
-            return $this->telegram->executeCommand("/USD");
-            return (new RUBCommand($this->telegram, new Update($update)))->preExecute();
+        if ($text === "USD") {
+            $update['message']['text'] = "/USD";
+            return $this->telegram->executeCommand("USD");
         }
+
         if ($text === "EUR") {
-            \Longman\TelegramBot\TelegramLog::error('EUR');
             $update['message']['text'] = "/EUR";
-            return $this->telegram->executeCommand("/USD");
-            return (new EURCommand($this->telegram, new Update($update)))->preExecute();
-            }
+            return $this->telegram->executeCommand("EUR");
+        }
+
+        if ($text === "RUB") {
+            $update['message']['text'] = "/RUB";
+            return $this->telegram->executeCommand("RUB");
+        }
+
         $conversation->stop();
         return Request::emptyResponse();
     }

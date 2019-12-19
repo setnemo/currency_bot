@@ -3,6 +3,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
 /**
@@ -56,6 +57,9 @@ class StartCommand extends SystemCommand
             'text'    => $text,
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
+            'reply_markup' => new Keyboard([
+                ['USD','EUR','RUB'],
+            ]),
         ];
         return Request::sendMessage($data);
     }
