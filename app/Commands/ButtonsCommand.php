@@ -45,13 +45,9 @@ class ButtonsCommand extends UserCommand
         $chat_id = $message->getChat()->getId();
         $text    = "Кнопки включены.";
         /** @var Keyboard $keyboards */
-        $keyboards = new Keyboard([
+        $keyboard = new Keyboard([
             'USD','EUR','RUB',
         ]);
-        $keyboard = $keyboards
-            ->setResizeKeyboard(true)
-            ->setOneTimeKeyboard(true)
-            ->setSelective(false);
 
         $data = [
             'chat_id' => $chat_id,
