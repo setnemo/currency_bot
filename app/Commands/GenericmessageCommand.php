@@ -5,9 +5,9 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Commands\SystemCommands\USDCommand;
-use Longman\TelegramBot\Commands\SystemCommands\RUBCommand;
-use Longman\TelegramBot\Commands\SystemCommands\EURCommand;
+use Longman\TelegramBot\Commands\UserCommands\USDCommand;
+use Longman\TelegramBot\Commands\UserCommands\RUBCommand;
+use Longman\TelegramBot\Commands\UserCommands\EURCommand;
 
 class GenericmessageCommand extends SystemCommand
 {
