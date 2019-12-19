@@ -1,8 +1,8 @@
 <?php
 
-namespace Longman\TelegramBot\Commands\SystemCommands;
+namespace Longman\TelegramBot\Commands\UserCommands;
 
-use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
 use USD2UAH\Currency\MinfinApi;
 
@@ -11,7 +11,7 @@ use USD2UAH\Currency\MinfinApi;
  *
  * Gets executed when a user first starts using the bot.
  */
-class RUBCommand extends SystemCommand
+class RUBCommand extends UserCommand
 {
     /**
      * @var string
