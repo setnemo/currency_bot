@@ -2,6 +2,7 @@
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
+use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommands\USDCommand;
@@ -19,6 +20,7 @@ class GenericmessageCommand extends SystemCommand
         $text = trim($this->getMessage()->getText(true));
 
         $update = json_decode($this->update->toJson(), true);
+        $conversation = new Conversation($this->getMessage()->getFrom()->getId(), $this->getMessage()->getChat()->getId(), $this->getName());
         \Longman\TelegramBot\TelegramLog::error('test', $text);
         \Longman\TelegramBot\TelegramLog::error('test', $update);
             if ($text === "USD") {
@@ -38,6 +40,7 @@ class GenericmessageCommand extends SystemCommand
             return $this->telegram->executeCommand("/USD");
             return (new EURCommand($this->telegram, new Update($update)))->preExecute();
             }
+        $conversation->stop();
         return Request::emptyResponse();
     }
 }

@@ -3,7 +3,6 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
@@ -33,6 +32,7 @@ class ButtonsCommand extends UserCommand
     /**
      * @var bool
      */
+    protected $private_only = true;
     /**
      * Command execute method
      *
@@ -44,10 +44,8 @@ class ButtonsCommand extends UserCommand
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
             'text'    => "Кнопки включены.",
-            'reply_markup' => new InlineKeyboard([
-                ['text' => 'USD', 'callback_data' => 'USD'],
-                ['text' => 'EUR', 'callback_data' => 'EUR'],
-                ['text' => 'RUB', 'callback_data' => 'RUB'],
+            'reply_markup' => new Keyboard([
+                'USD','EUR','RUB',
             ]),
         ];
         return Request::sendMessage($data);
