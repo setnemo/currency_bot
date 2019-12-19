@@ -32,7 +32,6 @@ class ButtonsCommand extends UserCommand
     /**
      * @var bool
      */
-    protected $private_only = true;
     /**
      * Command execute method
      *
@@ -41,18 +40,12 @@ class ButtonsCommand extends UserCommand
      */
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $text    = "Кнопки включены.";
-        /** @var Keyboard $keyboards */
-        $keyboard = new Keyboard([
-            'USD','EUR','RUB',
-        ]);
-
         $data = [
-            'chat_id' => $chat_id,
-            'text'    => $text,
-            'reply_markup' => $keyboard,
+            'chat_id' => $this->getMessage()->getChat()->getId(),
+            'text'    => "Кнопки включены.",
+            'reply_markup' => new Keyboard([
+                'USD','EUR','RUB',
+            ]),
         ];
         return Request::sendMessage($data);
     }
