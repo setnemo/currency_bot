@@ -28,15 +28,21 @@ class GenericmessageCommand extends SystemCommand
         $update = json_decode($this->update->toJson(), true);
         \Longman\TelegramBot\TelegramLog::error('test', $text);
         \Longman\TelegramBot\TelegramLog::error('test', $update);
-        foreach (self::BUTTONS as $button) {
-            \Longman\TelegramBot\TelegramLog::error('while');
-            if ($text === $button) {
-                \Longman\TelegramBot\TelegramLog::error('if');
-                $update['message']['text'] = "/{$button}";
-                $command = $button . 'Command';
-                return (new $command($this->telegram, new Update($update)))->preExecute();
+            if ($text === "USD") {
+                \Longman\TelegramBot\TelegramLog::error('USD');
+                $update['message']['text'] = "/USD";
+                return (new USDCommand($this->telegram, new Update($update)))->preExecute();
             }
-        }
+            if ($text === "RUB") {
+                \Longman\TelegramBot\TelegramLog::error('RUB');
+                $update['message']['text'] = "/RUB";
+                return (new RUBCommand($this->telegram, new Update($update)))->preExecute();
+            }
+            if ($text === "EUR") {
+                \Longman\TelegramBot\TelegramLog::error('EUR');
+                $update['message']['text'] = "/EUR";
+                return (new EURCommand($this->telegram, new Update($update)))->preExecute();
+            }
         return Request::emptyResponse();
     }
 }
