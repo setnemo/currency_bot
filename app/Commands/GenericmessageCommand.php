@@ -1,13 +1,14 @@
 <?php
 
+
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use Longman\TelegramBot\Commands\SystemCommand;
-use Longman\TelegramBot\Entities\Update;
-use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Commands\UserCommands\USDCommand;
 use Longman\TelegramBot\Commands\UserCommands\RUBCommand;
 use Longman\TelegramBot\Commands\UserCommands\EURCommand;
+use Longman\TelegramBot\Entities\Update;
+use Longman\TelegramBot\Request;
 
 class GenericmessageCommand extends SystemCommand
 {
