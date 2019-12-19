@@ -44,7 +44,23 @@ class USDCommand extends UserCommand
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $exchange = (new MinfinApi())->getCurrencyList();
-        $text    = "
+        $text = $this->getExchangeTextUSD($exchange);
+        $data = [
+            'chat_id' => $chat_id,
+            'text'    => $text,
+            'parse_mode' => 'markdown',
+            'disable_web_page_preview' => true,
+        ];
+        return Request::sendMessage($data);
+    }
+
+    /**
+     * @param array $exchange
+     * @return string
+     */
+    public static function getExchangeTextUSD(array $exchange): string
+    {
+        return $text = "
 **Курс USD к UAH**
 **Межбанк**
 Покупка: {$exchange[MinfinApi::MB]['usd']['bid']} 
@@ -59,12 +75,5 @@ class USDCommand extends UserCommand
 Продажа: {$exchange[MinfinApi::BANKS]['usd']['ask']} 
 
 Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
-        $data = [
-            'chat_id' => $chat_id,
-            'text'    => $text,
-            'parse_mode' => 'markdown',
-            'disable_web_page_preview' => true,
-        ];
-        return Request::sendMessage($data);
     }
 }
