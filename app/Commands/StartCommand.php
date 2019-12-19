@@ -52,14 +52,17 @@ class StartCommand extends SystemCommand
 
 Если у тебя будут проблемы с моей работой - пиши моему создателю, его контакты есть в описании.
 ";
+        $keyboard = new Keyboard([
+            'USD','EUR','RUB',
+        ]);
+
+        $keyboard->setResizeKeyboard(true);
         $data = [
             'chat_id' => $chat_id,
             'text'    => $text,
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
-            'reply_markup' => new Keyboard([
-                ['USD','EUR','RUB'],
-            ]),
+            'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
     }
