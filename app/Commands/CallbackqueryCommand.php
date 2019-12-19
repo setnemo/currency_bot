@@ -41,7 +41,7 @@ class CallbackqueryCommand extends SystemCommand
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => "Hello World! {$callback_data}",
-            'show_alert'        => true,
+            'show_alert'        => false,
             'cache_time'        => 5,
         ];
         return Request::answerCallbackQuery($data);
