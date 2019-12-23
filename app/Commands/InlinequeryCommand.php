@@ -54,8 +54,8 @@ class InlinequeryCommand extends SystemCommand
                     stripos($query, 'rub') !== false ||
                     stripos($query, 'eur') !== false
                 ) {
-                    $curr = strtolower(substr(trim($query), 0, 3));
-                    $query = intval(substr(trim($query), 4));
+                    $curr = trim(strtolower(substr($query, 0, 3)));
+                    $query = intval(substr($query, 4));
                 } else {
                     $curr = 'usd';
                 }
