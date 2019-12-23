@@ -47,7 +47,7 @@ class InlinequeryCommand extends SystemCommand
             if (is_numeric($query) && $query > 0 ||
                 stripos($query, 'usd') !== false && intval(substr(trim($query), 4)) > 0 ||
                 stripos($query, 'rub') !== false && intval(substr(trim($query), 4)) > 0 ||
-                stripos($query, 'eur') !== false && intval(substr(trim($query), 4)) > 0 ||
+                stripos($query, 'eur') !== false && intval(substr(trim($query), 4)) > 0
             ) {
 
                 if (stripos($query, 'usd') !== false ||
