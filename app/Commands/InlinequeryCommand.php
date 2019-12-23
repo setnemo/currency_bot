@@ -43,8 +43,12 @@ class InlinequeryCommand extends SystemCommand
         $query        = $inline_query->getQuery();
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = [];
+        $currencies = ['usd', 'eur', 'rub'];
         if ($query !== '') {
-            if (is_numeric($query) && $query > 0 || stripos($query, 'usd') !== false && intval(substr(trim($query), 4)) > 0) {
+            if (is_numeric($query) && $query > 0 || stripos($query, $currencies) !== false && intval(substr(trim($query), 4)) > 0) {
+                if (stripos($query, 'usd') !== false) {
+                    $query = intval(substr(trim($query), 4));
+                }
                 /** @TODO Need refactor */
                 $exchange = (new MinfinApi())->getCurrencyList();
                 $mb2 = 'Межбанк, продать доллар';
