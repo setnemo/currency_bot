@@ -43,42 +43,52 @@ class InlinequeryCommand extends SystemCommand
         $query        = $inline_query->getQuery();
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = [];
-        $currencies = ['usd', 'eur', 'rub'];
         if ($query !== '') {
-            if (is_numeric($query) && $query > 0 || stripos($query, $currencies) !== false && intval(substr(trim($query), 4)) > 0) {
-                if (stripos($query, $currencies) !== false) {
+            if (is_numeric($query) && $query > 0 ||
+                stripos($query, 'usd') !== false && intval(substr(trim($query), 4)) > 0 ||
+                stripos($query, 'rub') !== false && intval(substr(trim($query), 4)) > 0 ||
+                stripos($query, 'eur') !== false && intval(substr(trim($query), 4)) > 0 ||
+            ) {
+
+                if (stripos($query, 'usd') !== false ||
+                    stripos($query, 'rub') !== false ||
+                    stripos($query, 'eur') !== false
+                ) {
+                    $curr = strtolower(substr(trim($query), 0, 3));
                     $query = intval(substr(trim($query), 4));
+                } else {
+                    $curr = 'usd';
                 }
                 /** @TODO Need refactor */
                 $exchange = (new MinfinApi())->getCurrencyList();
                 $mb2 = 'Межбанк, продать доллар';
-                $desc2 = MessageCreator::createMultiplyMessage($query, 'USD', 'UAH', $exchange[MinfinApi::MB]['usd']['bid']);
+                $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['bid']);
                 $mb1 = 'Межбанк, продать доллар';
-                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', 'USD', $exchange[MinfinApi::MB]['usd']['bid']);
+                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['bid']);
                 $mb3 = 'Межбанк, купить доллар';
-                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', 'USD', $exchange[MinfinApi::MB]['usd']['ask']);
+                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['ask']);
                 $mb4 = 'Межбанк, купить доллар';
-                $desc4 = MessageCreator::createMultiplyMessage($query, 'USD', 'UAH', $exchange[MinfinApi::MB]['usd']['ask']);
+                $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['ask']);
                 $articles = [
                     InlineEntityCreator::getInstance()->fillTemplate(
                         $mb4,
                         $desc4,
-                        $mb4 . PHP_EOL . $desc4 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB]['usd']['ask'])
+                        $mb4 . PHP_EOL . $desc4 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['ask'])
                     ),
                     InlineEntityCreator::getInstance()->fillTemplate(
                         $mb3,
                         $desc3,
-                        $mb3 . PHP_EOL . $desc3 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB]['usd']['ask'])
+                        $mb3 . PHP_EOL . $desc3 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['ask'])
                     ),
                     InlineEntityCreator::getInstance()->fillTemplate(
                         $mb2,
                         $desc2,
-                        $mb2 . PHP_EOL . $desc2 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB]['usd']['bid'])
+                        $mb2 . PHP_EOL . $desc2 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['bid'])
                     ),
                     InlineEntityCreator::getInstance()->fillTemplate(
                         $mb1,
                         $desc1,
-                        $mb1 . PHP_EOL . $desc1 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB]['usd']['bid'])
+                        $mb1 . PHP_EOL . $desc1 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['bid'])
                     ),
                 ];
                 foreach ($articles as $article) {
