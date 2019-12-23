@@ -46,7 +46,7 @@ class InlinequeryCommand extends SystemCommand
         $currencies = ['usd', 'eur', 'rub'];
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || stripos($query, $currencies) !== false && intval(substr(trim($query), 4)) > 0) {
-                if (stripos($query, 'usd') !== false) {
+                if (stripos($query, $currencies) !== false) {
                     $query = intval(substr(trim($query), 4));
                 }
                 /** @TODO Need refactor */
