@@ -43,38 +43,9 @@ class InlinequeryCommand extends SystemCommand
         $query        = $inline_query->getQuery();
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = [];
-        if ($query !== '' && is_numeric($query) && $query > 0) {
-//            $user = $inline_query->getFrom()->getId();
-//            if (intval($user) !== intval(getenv('ADMIN'))) {
-//                $gz = new Client();
-//                $info = $gz->request(
-//                'GET',
-//                'https://free.currconv.com/api/v7/convert?q=USD_UAH&compact=ultra&apiKey=' . getenv('EX_TOKEN')
-//                )->getBody()->getContents();
-//                $ex = json_decode($info);
-//                if (isset($ex->USD_UAH)) {
-//                    $uah2usd = $query . 'UAH to USD: ' . round(floatval($query) / $ex->USD_UAH, 2);
-//                    $usd2uah = $query . 'USD to UAH: ' . round(floatval($query) * $ex->USD_UAH, 2);
-//                    $articles = [
-//                        [
-//                            'id' => '001',
-//                            'title' => '@USD2UAH_bot converter UAH to USD',
-//                            'description' => $uah2usd,
-//                            'input_message_content' => new InputTextMessageContent(['message_text' => $uah2usd]),
-//                        ],
-//                        [
-//                            'id' => '002',
-//                            'title' => '@USD2UAH_bot converter USD to UAH',
-//                            'description' => $usd2uah,
-//                            'input_message_content' => new InputTextMessageContent(['message_text' => $usd2uah]),
-//                        ],
-//                    ];
-//                    foreach ($articles as $article) {
-//                        $results[] = new InlineQueryResultArticle($article);
-//                    }
-//                }
-//            } else {
-            /** @TODO Need refactor */
+        if ($query !== '') {
+            if (is_numeric($query) && $query > 0 || strpos(strtolower($query), 'usd') && strpos(strtolower($query), ' ') > 0) {
+                /** @TODO Need refactor */
                 $exchange = (new MinfinApi())->getCurrencyList();
                 $mb2 = 'Межбанк, продать доллар';
                 $desc2 = MessageCreator::createMultiplyMessage($query, 'USD', 'UAH', $exchange[MinfinApi::MB]['usd']['bid']);
@@ -110,7 +81,7 @@ class InlinequeryCommand extends SystemCommand
                     $results[] = $article;
                 }
             }
-//        }
+        }
         $data['results'] = '[' . implode(',', $results) . ']';
 
         return Request::answerInlineQuery($data);
