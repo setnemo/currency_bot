@@ -60,16 +60,16 @@ class InlinequeryCommand extends SystemCommand
                 } else {
                     $curr = 'usd';
                 }
-                $pre = strtoupper($curr);
+                $pre = ' ' . strtoupper($curr);
                 /** @TODO Need refactor */
                 $exchange = (new MinfinApi())->getCurrencyList();
-                $mb2 = 'Межбанк, продать ' . $pre;
+                $mb2 = 'Межбанк, продать' . $pre;
                 $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['bid']);
-                $mb1 = 'Межбанк, продать ' . $pre;
+                $mb1 = 'Межбанк, продать' . $pre;
                 $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['bid']);
-                $mb3 = 'Межбанк, купить ' . $pre;
+                $mb3 = 'Межбанк, купить' . $pre;
                 $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['ask']);
-                $mb4 = 'Межбанк, купить ' . $pre;
+                $mb4 = 'Межбанк, купить' . $pre;
                 $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['ask']);
                 $articles = [
                     InlineEntityCreator::getInstance()->fillTemplate(
