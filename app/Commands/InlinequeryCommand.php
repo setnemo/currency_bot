@@ -43,6 +43,7 @@ class InlinequeryCommand extends SystemCommand
         $query        = $inline_query->getQuery();
         $data    = ['inline_query_id' => $inline_query->getId()];
         $results = [];
+        /** @TODO Need refactor */
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 ||
                 stripos($query, 'usd') !== false && intval(substr(trim($query), 4)) > 0 ||
@@ -59,7 +60,7 @@ class InlinequeryCommand extends SystemCommand
                 } else {
                     $curr = 'usd';
                 }
-                $pre = $curr;
+                $pre = strtoupper($curr);
                 /** @TODO Need refactor */
                 $exchange = (new MinfinApi())->getCurrencyList();
                 $mb2 = 'Межбанк, продать ' . $pre;
