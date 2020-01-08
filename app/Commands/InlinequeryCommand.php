@@ -11,6 +11,7 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\TelegramLog;
 use USD2UAH\Currency\MessageCreator;
 use USD2UAH\Currency\MinfinApi;
+use USD2UAH\Currency\Monobank;
 use USD2UAH\InlineEntityCreator;
 
 /**
@@ -64,6 +65,8 @@ class InlinequeryCommand extends SystemCommand
                 }
                 try {
                     $exchange = (new MinfinApi())->getCurrencyMB();
+                    $mono = (new Monobank())->getContents();
+                    \Longman\TelegramBot\TelegramLog::error('mono', $mono);
                 } catch (\Exception $e) {
                     \Longman\TelegramBot\TelegramLog::error($e->getMessage());
                     return false;
