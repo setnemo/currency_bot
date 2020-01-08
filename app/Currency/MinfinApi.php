@@ -56,7 +56,7 @@ class MinfinApi
                 [
                     'headers' => [
                         'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-                        'test' => 'true'
+//                        'test' => 'true'
                     ]
                 ]
             )->getBody()->getContents();

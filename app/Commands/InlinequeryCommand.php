@@ -35,15 +35,16 @@ class InlinequeryCommand extends SystemCommand
     /**
      * Command execute method
      *
-     * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @return bool|\Longman\TelegramBot\Entities\ServerResponse
      * @throws \Longman\TelegramBot\Exception\TelegramException
      */
     public function execute()
     {
         $inline_query = $this->getInlineQuery();
         $query        = $inline_query->getQuery();
-        $data    = ['inline_query_id' => $inline_query->getId()];
-        $results = [];
+        $data         = ['inline_query_id' => $inline_query->getId()];
+        $results      = [];
+
         /** @TODO Need refactor */
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 ||
@@ -64,23 +65,24 @@ class InlinequeryCommand extends SystemCommand
                 try {
                     $exchange = (new MinfinApi())->getCurrencyMB();
                 } catch (\Exception $e) {
-                    \Longman\TelegramBot\TelegramLog::error($e);
+                    \Longman\TelegramBot\TelegramLog::error($e->getMessage());
+                    return false;
                 }
                 $pre = ' ' . strtoupper($curr);
                 /** @TODO Need refactor */
                 $mb2 = 'Межбанк, продать' . $pre;
-                $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['bid']);
+                $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $this->getCurrencyByKey($exchange, $curr, 'bid'));
                 $mb1 = 'Межбанк, продать' . $pre;
-                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['bid']);
+                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $this->getCurrencyByKey($exchange, $curr, 'bid'));
                 $mb3 = 'Межбанк, купить' . $pre;
-                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $exchange[MinfinApi::MB][$curr]['ask']);
+                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $this->getCurrencyByKey($exchange, $curr, 'ask'));
                 $mb4 = 'Межбанк, купить' . $pre;
-                $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['ask']);
+                $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $this->getCurrencyByKey($exchange, $curr, 'ask'));
                 $articles = [
-                    $this->getFillTemplate($mb4, $desc4, $exchange[MinfinApi::MB][$curr]['ask']),
-                    $this->getFillTemplate($mb3, $desc3, $exchange[MinfinApi::MB][$curr]['ask']),
-                    $this->getFillTemplate($mb2, $desc2, $exchange[MinfinApi::MB][$curr]['bid']),
-                    $this->getFillTemplate($mb1, $desc1, $exchange[MinfinApi::MB][$curr]['bid']),
+                    $this->getFillTemplate($mb4, $desc4, $this->getCurrencyByKey($exchange, $curr, 'ask')),
+                    $this->getFillTemplate($mb3, $desc3, $this->getCurrencyByKey($exchange, $curr, 'ask')),
+                    $this->getFillTemplate($mb2, $desc2, $this->getCurrencyByKey($exchange, $curr, 'bid')),
+                    $this->getFillTemplate($mb1, $desc1, $this->getCurrencyByKey($exchange, $curr, 'bid')),
                 ];
                 foreach ($articles as $article) {
                     $results[] = $article;
@@ -98,17 +100,27 @@ class InlinequeryCommand extends SystemCommand
     }
 
     /**
-     * @param string $mb4
-     * @param string $desc4
+     * @param string $mb
+     * @param string $desc
      * @param string $exchange
      * @return InlineQueryResultArticle
      */
-    private function getFillTemplate(string $mb4, string $desc4, string $exchange): InlineQueryResultArticle
+    private function getFillTemplate(string $mb, string $desc, string $exchange): InlineQueryResultArticle
     {
         return InlineEntityCreator::getInstance()->fillTemplate(
-            $mb4,
-            $desc4,
-            $mb4 . PHP_EOL . $desc4 . PHP_EOL . $this->getSignText($exchange)
+            $mb,
+            $desc,
+            $mb . PHP_EOL . $desc . PHP_EOL . $this->getSignText($exchange)
         );
+    }
+
+    /**
+     * @param array $exchange
+     * @param string $curr
+     * @return mixed
+     */
+    private function getCurrencyByKey(array $exchange, string $curr, string $key)
+    {
+        return $exchange[$curr][$key];
     }
 }
