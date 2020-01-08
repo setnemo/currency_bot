@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;
+use Longman\TelegramBot\Exception\TelegramLogException;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\TelegramLog;
 use USD2UAH\Currency\MessageCreator;
@@ -60,9 +61,13 @@ class InlinequeryCommand extends SystemCommand
                 } else {
                     $curr = 'usd';
                 }
+                try {
+                    $exchange = (new MinfinApi())->getCurrencyMB();
+                } catch (\Exception $e) {
+                    \Longman\TelegramBot\TelegramLog::error($e);
+                }
                 $pre = ' ' . strtoupper($curr);
                 /** @TODO Need refactor */
-                $exchange = (new MinfinApi())->getCurrencyList();
                 $mb2 = 'Межбанк, продать' . $pre;
                 $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['bid']);
                 $mb1 = 'Межбанк, продать' . $pre;
@@ -72,26 +77,10 @@ class InlinequeryCommand extends SystemCommand
                 $mb4 = 'Межбанк, купить' . $pre;
                 $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $exchange[MinfinApi::MB][$curr]['ask']);
                 $articles = [
-                    InlineEntityCreator::getInstance()->fillTemplate(
-                        $mb4,
-                        $desc4,
-                        $mb4 . PHP_EOL . $desc4 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['ask'])
-                    ),
-                    InlineEntityCreator::getInstance()->fillTemplate(
-                        $mb3,
-                        $desc3,
-                        $mb3 . PHP_EOL . $desc3 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['ask'])
-                    ),
-                    InlineEntityCreator::getInstance()->fillTemplate(
-                        $mb2,
-                        $desc2,
-                        $mb2 . PHP_EOL . $desc2 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['bid'])
-                    ),
-                    InlineEntityCreator::getInstance()->fillTemplate(
-                        $mb1,
-                        $desc1,
-                        $mb1 . PHP_EOL . $desc1 . PHP_EOL . $this->getSignText($exchange[MinfinApi::MB][$curr]['bid'])
-                    ),
+                    $this->getFillTemplate($mb4, $desc4, $exchange[MinfinApi::MB][$curr]['ask']),
+                    $this->getFillTemplate($mb3, $desc3, $exchange[MinfinApi::MB][$curr]['ask']),
+                    $this->getFillTemplate($mb2, $desc2, $exchange[MinfinApi::MB][$curr]['bid']),
+                    $this->getFillTemplate($mb1, $desc1, $exchange[MinfinApi::MB][$curr]['bid']),
                 ];
                 foreach ($articles as $article) {
                     $results[] = $article;
@@ -106,5 +95,20 @@ class InlinequeryCommand extends SystemCommand
     private function getSignText(string $ex): string
     {
         return "<a href=\"https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=inline_bot_post\">Курс</a>: {$ex}";
+    }
+
+    /**
+     * @param string $mb4
+     * @param string $desc4
+     * @param string $exchange
+     * @return InlineQueryResultArticle
+     */
+    private function getFillTemplate(string $mb4, string $desc4, string $exchange): InlineQueryResultArticle
+    {
+        return InlineEntityCreator::getInstance()->fillTemplate(
+            $mb4,
+            $desc4,
+            $mb4 . PHP_EOL . $desc4 . PHP_EOL . $this->getSignText($exchange)
+        );
     }
 }

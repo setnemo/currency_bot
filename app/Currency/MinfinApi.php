@@ -38,6 +38,7 @@ class MinfinApi
     /**
      * @param string $route
      * @return string
+     * @throws \Exception
      */
     public function getContents(string $route): string
     {
@@ -55,7 +56,7 @@ class MinfinApi
                 [
                     'headers' => [
                         'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-//                        'test' => 'true'
+                        'test' => 'true'
                     ]
                 ]
             )->getBody()->getContents();
@@ -67,27 +68,13 @@ class MinfinApi
 
     public function getCurrencyList(): array
     {
-        $mb = $this->getContents($this->routes[self::MB]);
-        $nbu = $this->getContents($this->routes[self::NBU]);
-        $banks = $this->getContents($this->routes[self::BANKS]);
-
-        return $this->contentConverter($mb, $nbu, $banks);
-    }
-
-    /**
-     * @param string $mb
-     * @param string $nbu
-     * @param string $banks
-     * @return array
-     */
-    protected function contentConverter(string $mb, string $nbu, string $banks): array
-    {
         return [
-            self::BANKS => $this->formatData($banks),
-            self::NBU => $this->formatData($nbu),
-            self::MB => $this->formatData($mb),
+            self::BANKS => $this->getCurrencyBanks(),
+            self::NBU => $this->getCurrencyNBU(),
+            self::MB => $this->getCurrencyMB(),
         ];
     }
+
 
     /**
      * @param string $data
@@ -103,5 +90,32 @@ class MinfinApi
         }
 
         return array_reverse($array);
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getCurrencyMB(): array
+    {
+        return $this->formatData($this->getContents($this->routes[self::MB]));
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getCurrencyNBU(): array
+    {
+        return $this->formatData($this->getContents($this->routes[self::NBU]));
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getCurrencyBanks(): array
+    {
+        return $this->formatData($this->getContents($this->routes[self::BANKS]));
     }
 }
