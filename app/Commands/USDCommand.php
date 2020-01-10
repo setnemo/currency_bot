@@ -2,9 +2,10 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use GuzzleHttp\Client;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
-use USD2UAH\Currency\MinfinApi;
+use CurrencyUaBot\Currency\Api\Minfin;
 
 /**
  * Start command
@@ -43,7 +44,7 @@ class USDCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $exchange = (new MinfinApi())->getCurrencyList();
+        $exchange = (new Minfin(new Client()))->getCurrencyList();
         $text = $this->getExchangeTextUSD($exchange);
         $data = [
             'chat_id' => $chat_id,
@@ -63,16 +64,16 @@ class USDCommand extends UserCommand
         return $text = "
 **Курс USD к UAH**
 **Межбанк**
-Покупка: {$exchange[MinfinApi::MB]['usd']['bid']} 
-Продажа: {$exchange[MinfinApi::MB]['usd']['ask']} 
+Покупка: {$exchange[Minfin::MB]['usd']['bid']} 
+Продажа: {$exchange[Minfin::MB]['usd']['ask']} 
 
 **НБУ**
-Покупка: {$exchange[MinfinApi::NBU]['usd']['bid']} 
-Продажа: {$exchange[MinfinApi::NBU]['usd']['ask']} 
+Покупка: {$exchange[Minfin::NBU]['usd']['bid']} 
+Продажа: {$exchange[Minfin::NBU]['usd']['ask']} 
 
 **Средний курс в банках**
-Покупка: {$exchange[MinfinApi::BANKS]['usd']['bid']} 
-Продажа: {$exchange[MinfinApi::BANKS]['usd']['ask']} 
+Покупка: {$exchange[Minfin::BANKS]['usd']['bid']} 
+Продажа: {$exchange[Minfin::BANKS]['usd']['ask']} 
 
 Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
     }

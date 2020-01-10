@@ -25,7 +25,7 @@ try {
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/app.log', Logger::ERROR));
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/debug.log', Logger::DEBUG));
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
-    $hookRegistrator = new USD2UAH\BotRegistrator($telegram, $logger);
+    $hookRegistrator = new CurrencyUaBot\BotRegistrator($telegram, $logger);
     $hookRegistrator->register();
     Longman\TelegramBot\TelegramLog::initialize($logger);
     $telegram->enableAdmin(intval(getenv('ADMIN')));

@@ -1,6 +1,7 @@
 <?php
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
+use GuzzleHttp\Client;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Commands\UserCommands\ButtonsCommand;
 use Longman\TelegramBot\Commands\UserCommands\EURCommand;
@@ -8,7 +9,7 @@ use Longman\TelegramBot\Commands\UserCommands\RUBCommand;
 use Longman\TelegramBot\Commands\UserCommands\USDCommand;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
-use USD2UAH\Currency\MinfinApi;
+use CurrencyUaBot\Currency\Api\Minfin;
 
 /**
  * Callback query command
@@ -47,7 +48,7 @@ class CallbackqueryCommand extends SystemCommand
         \Longman\TelegramBot\TelegramLog::error('test');
         if ($callback_data === "USD") {
             \Longman\TelegramBot\TelegramLog::error('USD');
-            $exchange = (new MinfinApi())->getCurrencyList();
+            $exchange = (new Minfin(new Client()))->getCurrencyList();
             $text = USDCommand::getExchangeTextUSD($exchange);
         }
 

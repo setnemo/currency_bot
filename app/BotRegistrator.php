@@ -1,11 +1,11 @@
 <?php
 
-namespace USD2UAH;
+namespace CurrencyUaBot;
 
 use Longman\TelegramBot\Telegram as TgClient;
 use Longman\TelegramBot\Exception\TelegramException;
 use Monolog\Logger;
-use USD2UAH\Cache\RedisStorage;
+use CurrencyUaBot\Cache\RedisStorage;
 
 class BotRegistrator
 {

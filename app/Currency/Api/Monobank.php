@@ -1,29 +1,24 @@
 <?php
 
-namespace USD2UAH\Currency;
+namespace CurrencyUaBot\Currency\Api;
 
-use GuzzleHttp\Client;
-use USD2UAH\Cache\RedisStorage;
+use CurrencyUaBot\Cache\RedisStorage;
 
-class Monobank
+class Monobank extends ApiProvider implements CurrencyApi
 {
-    /** @var Client */
-    private $client;
 
-    /**
-     * MinfinApi constructor.
-     */
-    public function __construct()
+    function init()
     {
-        $this->client = new Client();
+        $this->setHost('https://api.monobank.ua/');
     }
 
     /**
      * @param string $route
      * @return string
      * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getContents(string $route): string
+    public function getContents(string $route = 'mono'): string
     {
         $redis = RedisStorage::getInstance();
 
@@ -35,7 +30,7 @@ class Monobank
             $logger->info($route);
             $result = $this->client->request(
                 'GET',
-                'https://api.monobank.ua/bank/currency',
+                $this->host . 'bank/currency',
                 [
                     'headers' => [
                         'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
@@ -43,11 +38,9 @@ class Monobank
                     ]
                 ]
             )->getBody()->getContents();
-            $redis->set('monobank', $result, 'EX', 300);
+            $redis->set($route, $result, 'EX', 300);
         }
 
         return $result;
     }
-
-
 }

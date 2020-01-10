@@ -1,6 +1,6 @@
 <?php
 
-namespace USD2UAH;
+namespace CurrencyUaBot;
 
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;

@@ -1,6 +1,6 @@
 <?php
 
-namespace USD2UAH\Currency;
+namespace CurrencyUaBot\Currency;
 
 class MessageCreator
 {

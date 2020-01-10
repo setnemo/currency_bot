@@ -1,6 +1,6 @@
 <?php
 
-namespace USD2UAH\Cache;
+namespace CurrencyUaBot\Cache;
 
 use Predis\Client;
 

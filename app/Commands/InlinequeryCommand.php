@@ -9,10 +9,10 @@ use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;
 use Longman\TelegramBot\Exception\TelegramLogException;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\TelegramLog;
-use USD2UAH\Currency\MessageCreator;
-use USD2UAH\Currency\MinfinApi;
-use USD2UAH\Currency\Monobank;
-use USD2UAH\InlineEntityCreator;
+use CurrencyUaBot\Currency\MessageCreator;
+use CurrencyUaBot\Currency\Api\Minfin;
+use CurrencyUaBot\Currency\Api\Monobank;
+use CurrencyUaBot\InlineEntityCreator;
 
 /**
  * Inline query command
@@ -64,9 +64,9 @@ class InlinequeryCommand extends SystemCommand
                     $curr = 'usd';
                 }
                 try {
-                    $exchange = (new MinfinApi())->getCurrencyMB();
-                    $mono = (new Monobank())->getContents();
-                    \Longman\TelegramBot\TelegramLog::error('mono', $mono);
+                    $exchange = (new Minfin(new Client()))->getCurrencyMB();
+                    $mono = (new Monobank(new Client()))->getContents();
+                    \Longman\TelegramBot\TelegramLog::error('mono', [$mono]);
                 } catch (\Exception $e) {
                     \Longman\TelegramBot\TelegramLog::error($e->getMessage());
                     return false;
@@ -113,13 +113,15 @@ class InlinequeryCommand extends SystemCommand
         return InlineEntityCreator::getInstance()->fillTemplate(
             $mb,
             $desc,
-            $mb . PHP_EOL . $desc . PHP_EOL . $this->getSignText($exchange)
+            $mb . PHP_EOL . $desc
+        //. PHP_EOL . $this->getSignText($exchange)
         );
     }
 
     /**
      * @param array $exchange
      * @param string $curr
+     * @param string $key
      * @return mixed
      */
     private function getCurrencyByKey(array $exchange, string $curr, string $key)

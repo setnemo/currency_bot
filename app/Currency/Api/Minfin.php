@@ -1,18 +1,17 @@
 <?php
 
-namespace USD2UAH\Currency;
+namespace CurrencyUaBot\Currency\Api;
 
-use GuzzleHttp\Client;
-use USD2UAH\Cache\RedisStorage;
+use CurrencyUaBot\Cache\RedisStorage;
+use GuzzleHttp\Exception\GuzzleException;
 
-class MinfinApi
+class Minfin extends ApiProvider implements CurrencyApi
 {
     public const MB = 'megbank';
     public const NBU = 'nbu';
     public const BANKS = 'banks';
 
-    /** @var string */
-    protected $host = 'http://api.minfin.com.ua/';
+    protected $token = '';
 
     /** @var array */
     protected $routes = [
@@ -21,24 +20,17 @@ class MinfinApi
         self::BANKS => 'summary/',
     ];
 
-    /** @var string */
-    private $token = '';
-    /** @var Client */
-    private $client;
-
-    /**
-     * MinfinApi constructor.
-     */
-    public function __construct()
+    function init()
     {
-        $this->token = getenv('EX_TOKEN2');
-        $this->client = new Client();
+        $this->setToken(getenv('EX_TOKEN2'));
+        $this->setHost('http://api.minfin.com.ua/');
     }
 
     /**
      * @param string $route
      * @return string
      * @throws \Exception
+     * @throws GuzzleException
      */
     public function getContents(string $route): string
     {
@@ -56,7 +48,7 @@ class MinfinApi
                 [
                     'headers' => [
                         'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-//                        'test' => 'true'
+                        'test' => 'true'
                     ]
                 ]
             )->getBody()->getContents();
@@ -95,6 +87,7 @@ class MinfinApi
     /**
      * @return array
      * @throws \Exception
+     * @throws GuzzleException
      */
     public function getCurrencyMB(): array
     {
@@ -104,6 +97,7 @@ class MinfinApi
     /**
      * @return array
      * @throws \Exception
+     * @throws GuzzleException
      */
     public function getCurrencyNBU(): array
     {
@@ -113,9 +107,20 @@ class MinfinApi
     /**
      * @return array
      * @throws \Exception
+     * @throws GuzzleException
      */
     public function getCurrencyBanks(): array
     {
         return $this->formatData($this->getContents($this->routes[self::BANKS]));
+    }
+
+    /**
+     * @param string $token
+     * @return Minfin
+     */
+    public function setToken(string $token): Minfin
+    {
+        $this->token = $token;
+        return $this;
     }
 }
