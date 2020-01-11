@@ -1,6 +1,7 @@
 <?php
 
-use GuzzleHttp\Client;
+use CurrencyUaBot\Cache\RedisStorage;
+use CurrencyUaBot\Core\App;
 use Monolog\Logger;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -21,13 +22,18 @@ $mysql_credentials = [
 ];
 
 try {
-    $logger = new Monolog\Logger('bot');
+    App::bind('redis', RedisStorage::getInstance());
+
+    $logger = new Monolog\Logger('app');
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/app.log', Logger::ERROR));
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/debug.log', Logger::DEBUG));
+    App::bind('logger', $logger);
+
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
-    $hookRegistrator = new CurrencyUaBot\BotRegistrator($telegram, $logger);
-    $hookRegistrator->register();
+    (new CurrencyUaBot\Helpers\BotRegistrator($telegram))->register($botName);
+
     Longman\TelegramBot\TelegramLog::initialize($logger);
+
     $telegram->enableAdmin(intval(getenv('ADMIN')));
     $telegram->addCommandsPaths($commands_paths);
     $telegram->enableMySql($mysql_credentials);

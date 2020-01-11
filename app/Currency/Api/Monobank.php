@@ -4,7 +4,7 @@ namespace CurrencyUaBot\Currency\Api;
 
 use CurrencyUaBot\Cache\RedisStorage;
 
-class Monobank extends ApiProvider implements CurrencyApi
+class Monobank extends ApiWrapper implements CurrencyContent
 {
 
     function init()

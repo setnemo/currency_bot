@@ -97,11 +97,6 @@ class InlinequeryCommand extends SystemCommand
         return Request::answerInlineQuery($data);
     }
 
-    private function getSignText(string $ex): string
-    {
-        return "<a href=\"https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=inline_bot_post\">Курс</a>: {$ex}";
-    }
-
     /**
      * @param string $mb
      * @param string $desc

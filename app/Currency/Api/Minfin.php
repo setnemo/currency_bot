@@ -2,11 +2,13 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Cache\RedisStorage;
+use CurrencyUaBot\Helpers\Cacheable;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Minfin extends ApiProvider implements CurrencyApi
+class Minfin extends ApiWrapper implements CurrencyContent
 {
+    use Cacheable;
+
     public const MB = 'megbank';
     public const NBU = 'nbu';
     public const BANKS = 'banks';
@@ -34,10 +36,8 @@ class Minfin extends ApiProvider implements CurrencyApi
      */
     public function getContents(string $route): string
     {
-        $redis = RedisStorage::getInstance();
-
-        if ($redis->exists($route)) {
-            $result = $redis->get($route);
+        if ($this->redis()->exists($route)) {
+            $result = $this->redis()->get($route);
         } else {
             $logger = new \Monolog\Logger('minfin');
             $logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/../../logs/minfin.log'));
@@ -52,7 +52,7 @@ class Minfin extends ApiProvider implements CurrencyApi
                     ]
                 ]
             )->getBody()->getContents();
-            $redis->set($route, $result, 'EX', 300);
+            $this->redis()->set($route, $result, 'EX', 300);
         }
 
         return $result;

@@ -4,7 +4,7 @@ namespace CurrencyUaBot\Currency\Api;
 
 use GuzzleHttp\ClientInterface;
 
-abstract class ApiProvider
+abstract class ApiWrapper
 {
     /** @var string */
     protected $host = '';
