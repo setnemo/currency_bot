@@ -22,12 +22,12 @@ class BotRegistrator
     public function register(string $prefix)
     {
         $key = $prefix . '_registered';
-        if(!$this->redis()->exists($key)){
+        if(!$this->cache()->exists($key)){
             try {
                 $hook_url = "https://". $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
                 $result = $this->bot->setWebhook($hook_url);
                 if ($result->isOk()) {
-                    $this->redis()->set($key, $result->getDescription());
+                    $this->cache()->set($key, $result->getDescription());
                 }
             } catch (TelegramException $e) {
                 $this->logger()->error('Registered failed', ['error' => $e->getMessage()]);

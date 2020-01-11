@@ -2,8 +2,6 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Cache\RedisStorage;
-
 class Monobank extends ApiWrapper implements CurrencyContent
 {
 
@@ -13,21 +11,19 @@ class Monobank extends ApiWrapper implements CurrencyContent
     }
 
     /**
-     * @param string $route
+     * @param string $source
      * @return string
-     * @throws \Exception
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
      */
-    public function getContents(string $route = 'mono'): string
+    public function getContents(string $source = 'all'): string
     {
-        $redis = RedisStorage::getInstance();
-
-        if ($redis->exists($route)) {
-            $result = $redis->get($route);
+        $key = $this->getRedisSlug($source);
+        if ($this->cache()->exists($key)) {
+            $result = $this->cache()->get($key);
         } else {
-            $logger = new \Monolog\Logger('monobank');
-            $logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/../../logs/mono.log'));
-            $logger->info($route);
+            $logger = $this->requestLogger($this->getShortName());
+            $logger->info($key);
             $result = $this->client->request(
                 'GET',
                 $this->host . 'bank/currency',
@@ -38,7 +34,7 @@ class Monobank extends ApiWrapper implements CurrencyContent
                     ]
                 ]
             )->getBody()->getContents();
-            $redis->set($route, $result, 'EX', 300);
+            $this->cache()->set($key, $result, 'EX', 300);
         }
 
         return $result;

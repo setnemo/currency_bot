@@ -45,7 +45,12 @@ class ButtonsCommand extends UserCommand
             'chat_id' => $this->getMessage()->getChat()->getId(),
             'text'    => "Кнопки включены.",
             'reply_markup' => new Keyboard([
-                'USD','EUR','RUB',
+//                [
+                    'USD','EUR',
+//                ],
+//                [
+                    'RUB', 'test'
+//                ],
             ]),
         ];
         return Request::sendMessage($data);

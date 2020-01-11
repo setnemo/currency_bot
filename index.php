@@ -22,11 +22,14 @@ $mysql_credentials = [
 ];
 
 try {
+    App::bind('db', \CurrencyUaBot\Core\Connection::get());
+
     App::bind('redis', RedisStorage::getInstance());
 
+    App::bind('log_path', __DIR__ . '/logs/');
     $logger = new Monolog\Logger('app');
-    $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/app.log', Logger::ERROR));
-    $logger->pushHandler(new  Monolog\Handler\StreamHandler(__DIR__.'/logs/debug.log', Logger::DEBUG));
+    $logger->pushHandler(new  Monolog\Handler\StreamHandler(App::get('log_path') . 'app.log', Logger::ERROR));
+    $logger->pushHandler(new  Monolog\Handler\StreamHandler(App::get('log_path') . 'debug.log', Logger::DEBUG));
     App::bind('logger', $logger);
 
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
@@ -36,7 +39,7 @@ try {
 
     $telegram->enableAdmin(intval(getenv('ADMIN')));
     $telegram->addCommandsPaths($commands_paths);
-    $telegram->enableMySql($mysql_credentials);
+    $telegram->enableMySql(App::get('db'));
     $telegram->enableLimiter();
     $telegram->handle();
 

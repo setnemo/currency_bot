@@ -4,7 +4,8 @@
         "vlucas/phpdotenv": "^4.1",
         "monolog/monolog": "^2.0",
         "predis/predis": "^1.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "slim/pdo": "^1.10"
     },
     "autoload": {
         "psr-4": {

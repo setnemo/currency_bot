@@ -2,13 +2,10 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Helpers\Cacheable;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Minfin extends ApiWrapper implements CurrencyContent
 {
-    use Cacheable;
-
     public const MB = 'megbank';
     public const NBU = 'nbu';
     public const BANKS = 'banks';
@@ -29,19 +26,20 @@ class Minfin extends ApiWrapper implements CurrencyContent
     }
 
     /**
-     * @param string $route
+     * @param string $source
      * @return string
-     * @throws \Exception
      * @throws GuzzleException
+     * @throws \ReflectionException
      */
-    public function getContents(string $route): string
+    public function getContents(string $source): string
     {
-        if ($this->redis()->exists($route)) {
-            $result = $this->redis()->get($route);
+        $route = $this->routes[$source];
+        $key = $this->getRedisSlug($source);
+        if ($this->cache()->exists($key)) {
+            $result = $this->cache()->get($key);
         } else {
-            $logger = new \Monolog\Logger('minfin');
-            $logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/../../logs/minfin.log'));
-            $logger->info($route);
+            $logger = $this->requestLogger($this->getShortName());
+            $logger->info($key);
             $result = $this->client->request(
                 'GET',
                 $this->host . $route . $this->token,
@@ -52,7 +50,7 @@ class Minfin extends ApiWrapper implements CurrencyContent
                     ]
                 ]
             )->getBody()->getContents();
-            $this->redis()->set($route, $result, 'EX', 300);
+            $this->cache()->set($key, $result, 'EX', 300);
         }
 
         return $result;
@@ -91,7 +89,7 @@ class Minfin extends ApiWrapper implements CurrencyContent
      */
     public function getCurrencyMB(): array
     {
-        return $this->formatData($this->getContents($this->routes[self::MB]));
+        return $this->formatData($this->getContents(self::MB));
     }
 
     /**
@@ -101,7 +99,7 @@ class Minfin extends ApiWrapper implements CurrencyContent
      */
     public function getCurrencyNBU(): array
     {
-        return $this->formatData($this->getContents($this->routes[self::NBU]));
+        return $this->formatData($this->getContents(self::NBU));
     }
 
     /**
@@ -111,7 +109,7 @@ class Minfin extends ApiWrapper implements CurrencyContent
      */
     public function getCurrencyBanks(): array
     {
-        return $this->formatData($this->getContents($this->routes[self::BANKS]));
+        return $this->formatData($this->getContents(self::BANKS));
     }
 
     /**
@@ -123,4 +121,5 @@ class Minfin extends ApiWrapper implements CurrencyContent
         $this->token = $token;
         return $this;
     }
+
 }

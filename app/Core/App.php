@@ -22,10 +22,19 @@ class App
      */
     public static function get(string $key)
     {
-        if (!array_key_exists($key, static::$registry)) {
+        if (!self::exist($key)) {
             throw new \Exception('No {$key} is bound in the container.');
         }
 
         return static::$registry[$key];
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public static function exist(string $key)
+    {
+        return array_key_exists($key, static::$registry);
     }
 }

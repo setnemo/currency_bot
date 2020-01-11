@@ -2,10 +2,15 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
+use CurrencyUaBot\Helpers\Cacheable;
+use CurrencyUaBot\Helpers\Logable;
 use GuzzleHttp\ClientInterface;
 
 abstract class ApiWrapper
 {
+    use Cacheable, Logable;
+
+
     /** @var string */
     protected $host = '';
     /** @var ClientInterface */
