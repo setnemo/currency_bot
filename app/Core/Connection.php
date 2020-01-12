@@ -8,8 +8,7 @@ class Connection
     {
         $dbhost = getenv('DB_HOST');
         $dbname = getenv('DB_NAME');
-        $dbcharset = 'UTF-8';
-        $dsn = "mysql:host={$dbhost};dbname={$dbname};charset={$dbcharset}";
+        $dsn = "mysql:host={$dbhost};dbname={$dbname};charset=utf8";
         $usr = getenv('DB_USERNAME');
         $pwd = getenv('DB_PASSWORD');
         return new \Slim\PDO\Database($dsn, $usr, $pwd);

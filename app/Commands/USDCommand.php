@@ -67,14 +67,17 @@ class USDCommand extends UserCommand
 Покупка: {$exchange[Minfin::MB]['usd']['bid']} 
 Продажа: {$exchange[Minfin::MB]['usd']['ask']} 
 
-**НБУ**
-Покупка: {$exchange[Minfin::NBU]['usd']['bid']} 
-Продажа: {$exchange[Minfin::NBU]['usd']['ask']} 
-
 **Средний курс в банках**
 Покупка: {$exchange[Minfin::BANKS]['usd']['bid']} 
 Продажа: {$exchange[Minfin::BANKS]['usd']['ask']} 
 
 Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
     }
+
+    /**
+     *
+     **НБУ**
+    Покупка: {$exchange[Minfin::NBU]['usd']['bid']}
+    Продажа: {$exchange[Minfin::NBU]['usd']['ask']}
+     */
 }

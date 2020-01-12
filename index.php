@@ -2,6 +2,7 @@
 
 use CurrencyUaBot\Cache\RedisStorage;
 use CurrencyUaBot\Core\App;
+use CurrencyUaBot\Core\Connection;
 use Monolog\Logger;
 
 require __DIR__ . '/vendor/autoload.php';
@@ -13,24 +14,18 @@ $commands_paths = [
 
 $token  = getenv('TG_TOKEN');
 $botName  = getenv('TG_BOT_NAME');
-$mysql_credentials = [
-    'host'     => getenv('DB_HOST'),
-    'port'     => getenv('DB_PORT'),
-    'user'     => getenv('DB_USERNAME'),
-    'password' => getenv('DB_PASSWORD'),
-    'database' => getenv('DB_NAME'),
-];
 
 try {
-    App::bind('db', \CurrencyUaBot\Core\Connection::get());
-
-    App::bind('redis', RedisStorage::getInstance());
 
     App::bind('log_path', __DIR__ . '/logs/');
     $logger = new Monolog\Logger('app');
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(App::get('log_path') . 'app.log', Logger::ERROR));
     $logger->pushHandler(new  Monolog\Handler\StreamHandler(App::get('log_path') . 'debug.log', Logger::DEBUG));
     App::bind('logger', $logger);
+
+    App::bind('db', Connection::get());
+
+    App::bind('redis', RedisStorage::getInstance());
 
     $telegram = new Longman\TelegramBot\Telegram($token, $botName);
     (new CurrencyUaBot\Helpers\BotRegistrator($telegram))->register($botName);
@@ -39,7 +34,9 @@ try {
 
     $telegram->enableAdmin(intval(getenv('ADMIN')));
     $telegram->addCommandsPaths($commands_paths);
-    $telegram->enableMySql(App::get('db'));
+
+    $telegram->enableExternalMySql(App::get('db'));
+
     $telegram->enableLimiter();
     $telegram->handle();
 

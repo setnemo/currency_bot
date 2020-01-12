@@ -44,19 +44,17 @@ class CallbackqueryCommand extends SystemCommand
         $callback_query_id = $callback_query->getId();
         $callback_data     = $callback_query->getData();
 
-
-        \Longman\TelegramBot\TelegramLog::error('test');
-        if ($callback_data === "USD") {
-            \Longman\TelegramBot\TelegramLog::error('USD');
+        if ($callback_data === "identifier") {
             $exchange = (new Minfin(new Client()))->getCurrencyList();
             $text = USDCommand::getExchangeTextUSD($exchange);
+//            $text = '!!!!';
         }
 
 
         $data = [
             'callback_query_id' => $callback_query_id,
             'text'              => $text ?? 'uuuups',
-            'show_alert'        => true,
+//            'show_alert'        => true,
             'cache_time'        => 5,
         ];
         return Request::answerCallbackQuery($data);

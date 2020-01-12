@@ -51,10 +51,6 @@ class EURCommand extends UserCommand
 Покупка: {$exchange[Minfin::MB]['eur']['bid']} 
 Продажа: {$exchange[Minfin::MB]['eur']['ask']} 
 
-**НБУ**
-Покупка: {$exchange[Minfin::NBU]['eur']['bid']} 
-Продажа: {$exchange[Minfin::NBU]['eur']['ask']} 
-
 **Средний курс в банках**
 Покупка: {$exchange[Minfin::BANKS]['eur']['bid']} 
 Продажа: {$exchange[Minfin::BANKS]['eur']['ask']} 
@@ -69,3 +65,10 @@ class EURCommand extends UserCommand
         return Request::sendMessage($data);
     }
 }
+
+/**
+ *
+ **НБУ**
+Покупка: {$exchange[Minfin::NBU]['eur']['bid']}
+Продажа: {$exchange[Minfin::NBU]['eur']['ask']}
+ */

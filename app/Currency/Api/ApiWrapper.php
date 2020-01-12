@@ -10,7 +10,6 @@ abstract class ApiWrapper
 {
     use Cacheable, Logable;
 
-
     /** @var string */
     protected $host = '';
     /** @var ClientInterface */

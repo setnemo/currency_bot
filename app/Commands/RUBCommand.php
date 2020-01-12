@@ -51,10 +51,6 @@ class RUBCommand extends UserCommand
 Покупка: {$exchange[Minfin::MB]['rub']['bid']} 
 Продажа: {$exchange[Minfin::MB]['rub']['ask']} 
 
-**НБУ**
-Покупка: {$exchange[Minfin::NBU]['rub']['bid']} 
-Продажа: {$exchange[Minfin::NBU]['rub']['ask']} 
-
 **Средний курс в банках**
 Покупка: {$exchange[Minfin::BANKS]['rub']['bid']} 
 Продажа: {$exchange[Minfin::BANKS]['rub']['ask']} 
@@ -68,4 +64,12 @@ class RUBCommand extends UserCommand
         ];
         return Request::sendMessage($data);
     }
+
+/**
+ *
+ **НБУ**
+Покупка: {$exchange[Minfin::NBU]['rub']['bid']}
+Продажа: {$exchange[Minfin::NBU]['rub']['ask']}
+
+ */
 }
