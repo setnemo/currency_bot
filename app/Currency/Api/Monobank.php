@@ -2,7 +2,9 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-class Monobank extends ApiWrapper implements CurrencyContent
+use CurrencyUaBot\Currency\CurrencyEntity;
+
+class Monobank extends ApiWrapper
 {
 
     function init()

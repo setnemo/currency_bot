@@ -6,8 +6,28 @@ use CurrencyUaBot\Currency\CurrencyEntity;
 
 interface CurrencyContent
 {
+    /**
+     * @param string $route
+     * @return string
+     */
     public function getContents(string $route): string;
 
-//    public function getCurrency(string $currency = null): CurrencyEntity;
+    /**
+     * @param string|null $currency
+     * @return CurrencyEntity
+     */
+    public function getCurrency(string $currency = null): CurrencyEntity;
+
+    /**
+     * @param string|null $currency
+     * @return float
+     */
+    public function getSale(string $currency = null): float;
+
+    /**
+     * @param string|null $currency
+     * @return float
+     */
+    public function getBuy(string $currency = null): float;
 
 }

@@ -26,7 +26,7 @@ class CurrencyEntity
         $this->name = $name;
         $this->sale = $sale;
         $this->buy = $buy;
-        $this->saveToCache();
+//        $this->saveToCache();
     }
 
     /**
@@ -55,15 +55,15 @@ class CurrencyEntity
         ];
     }
 
-    /**
-     * @return array
-     * @throws \Exception
-     */
-    private function saveToCache(): array
-    {
-        $key = "{$this->source}::{$this->name}";
-        $result = $this->toArray();
-        $this->cache()->set($key, json_encode($result), 'EX', 300);
-    }
+//    /**
+//     * @return array
+//     * @throws \Exception
+//     */
+//    private function saveToCache(): array
+//    {
+//        $key = "{$this->source}::{$this->name}";
+//        $result = $this->toArray();
+//        $this->cache()->set($key, json_encode($result), 'EX', 300);
+//    }
 
 }

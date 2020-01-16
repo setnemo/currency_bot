@@ -65,8 +65,9 @@ class InlinequeryCommand extends SystemCommand
                 }
                 try {
                     $exchange = (new Minfin(new Client()))->getCurrencyMB();
-                    $mono = (new Monobank(new Client()))->getContents();
-                    \Longman\TelegramBot\TelegramLog::error('mono', [$mono]);
+                    $entity = (new Minfin(new Client()))->freshCurrency(Minfin::MB);
+//                    $mono = (new Monobank(new Client()))->getContents();
+//                    \Longman\TelegramBot\TelegramLog::error('mono', [$mono]);
                 } catch (\Exception $e) {
                     \Longman\TelegramBot\TelegramLog::error($e->getMessage());
                     return false;
@@ -74,18 +75,18 @@ class InlinequeryCommand extends SystemCommand
                 $pre = ' ' . strtoupper($curr);
                 /** @TODO Need refactor */
                 $mb2 = 'Межбанк, продать' . $pre;
-                $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $this->getCurrencyByKey($exchange, $curr, 'bid'));
+                $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $entity->getBuy($curr));
                 $mb1 = 'Межбанк, продать' . $pre;
-                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $this->getCurrencyByKey($exchange, $curr, 'bid'));
+                $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $entity->getBuy($curr));
                 $mb3 = 'Межбанк, купить' . $pre;
-                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $this->getCurrencyByKey($exchange, $curr, 'ask'));
+                $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $entity->getSale($curr));
                 $mb4 = 'Межбанк, купить' . $pre;
-                $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $this->getCurrencyByKey($exchange, $curr, 'ask'));
+                $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $entity->getSale($curr));
                 $articles = [
-                    $this->getFillTemplate($mb4, $desc4, $this->getCurrencyByKey($exchange, $curr, 'ask')),
-                    $this->getFillTemplate($mb3, $desc3, $this->getCurrencyByKey($exchange, $curr, 'ask')),
-                    $this->getFillTemplate($mb2, $desc2, $this->getCurrencyByKey($exchange, $curr, 'bid')),
-                    $this->getFillTemplate($mb1, $desc1, $this->getCurrencyByKey($exchange, $curr, 'bid')),
+                    $this->getFillTemplate($mb4, $desc4, $entity->getSale($curr)),
+                    $this->getFillTemplate($mb3, $desc3, $entity->getSale($curr)),
+                    $this->getFillTemplate($mb2, $desc2, $entity->getBuy($curr)),
+                    $this->getFillTemplate($mb1, $desc1, $entity->getBuy($curr)),
                 ];
                 foreach ($articles as $article) {
                     $results[] = $article;
