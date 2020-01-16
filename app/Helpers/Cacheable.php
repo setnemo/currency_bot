@@ -17,20 +17,22 @@ trait Cacheable
 
     /**
      * @param string $source
+     * @param string|null $customClassName
      * @return string
      * @throws \ReflectionException
      */
-    public function getRedisSlug(string $source)
+    public function getCacheSlug(string $source, string $customClassName = null)
     {
-        return $this->getShortName() . '::' . $source;
+        return $this->getShortName($customClassName) . '::' . $source;
     }
 
     /**
+     * @param string|null $name
      * @return string
      * @throws \ReflectionException
      */
-    public function getShortName(): string
+    public function getShortName(string $name = null): string
     {
-        return (new \ReflectionClass($this))->getShortName();
+        return $name ? $name : (new \ReflectionClass($this))->getShortName();
     }
 }

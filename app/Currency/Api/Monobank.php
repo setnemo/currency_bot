@@ -18,7 +18,7 @@ class Monobank extends ApiWrapper implements CurrencyContent
      */
     public function getContents(string $source = 'all'): string
     {
-        $key = $this->getRedisSlug($source);
+        $key = $this->getCacheSlug($source);
         if ($this->cache()->exists($key)) {
             $result = $this->cache()->get($key);
         } else {

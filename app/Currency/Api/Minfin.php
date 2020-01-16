@@ -34,7 +34,7 @@ class Minfin extends ApiWrapper implements CurrencyContent
     public function getContents(string $source): string
     {
         $route = $this->routes[$source];
-        $key = $this->getRedisSlug($source);
+        $key = $this->getCacheSlug($source);
         if ($this->cache()->exists($key)) {
             $result = $this->cache()->get($key);
         } else {
