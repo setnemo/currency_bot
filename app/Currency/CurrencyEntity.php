@@ -26,7 +26,6 @@ class CurrencyEntity
         $this->name = $name;
         $this->sale = $sale;
         $this->buy = $buy;
-//        $this->saveToCache();
     }
 
     /**
@@ -54,16 +53,4 @@ class CurrencyEntity
             "buy" => $this->buy,
         ];
     }
-
-//    /**
-//     * @return array
-//     * @throws \Exception
-//     */
-//    private function saveToCache(): array
-//    {
-//        $key = "{$this->source}::{$this->name}";
-//        $result = $this->toArray();
-//        $this->cache()->set($key, json_encode($result), 'EX', 300);
-//    }
-
 }

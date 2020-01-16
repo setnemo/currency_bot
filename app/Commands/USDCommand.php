@@ -2,6 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use CurrencyUaBot\Currency\CurrencyEntity;
 use GuzzleHttp\Client;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Request;
@@ -34,18 +35,24 @@ class USDCommand extends UserCommand
      * @var bool
      */
     protected $private_only = true;
+
     /**
      * Command execute method
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Longman\TelegramBot\Exception\TelegramException
+     * @throws \ReflectionException
      */
     public function execute()
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $exchange = (new Minfin(new Client()))->getCurrencyList();
-        $text = $this->getExchangeTextUSD($exchange);
+        $entityMB = (new Minfin(new Client()))->freshCurrency(Minfin::MB)->getCurrency('usd');
+        $entityBanks = (new Minfin(new Client()))->freshCurrency(Minfin::BANKS)->getCurrency('usd');
+        $entityNBU = (new Minfin(new Client()))->freshCurrency(Minfin::NBU)->getCurrency('usd');
+
+        $text = $this->getExchangeTextUSDe($entityMB, $entityBanks, $entityNBU);
         $data = [
             'chat_id' => $chat_id,
             'text'    => $text,
@@ -55,29 +62,25 @@ class USDCommand extends UserCommand
         return Request::sendMessage($data);
     }
 
-    /**
-     * @param array $exchange
-     * @return string
-     */
-    public static function getExchangeTextUSD(array $exchange): string
-    {
+    public static function getExchangeTextUSDe(
+        CurrencyEntity $entityMB,
+        CurrencyEntity $entityBanks,
+        CurrencyEntity $entityNBU
+    ): string {
         return $text = "
 **Курс USD к UAH**
 **Межбанк**
-Покупка: {$exchange[Minfin::MB]['usd']['bid']} 
-Продажа: {$exchange[Minfin::MB]['usd']['ask']} 
+Покупка: {$entityMB->getSale()} 
+Продажа: {$entityMB->getBuy()} 
 
 **Средний курс в банках**
-Покупка: {$exchange[Minfin::BANKS]['usd']['bid']} 
-Продажа: {$exchange[Minfin::BANKS]['usd']['ask']} 
+Покупка: {$entityBanks->getSale()} 
+Продажа: {$entityBanks->getBuy()}
+
+**НБУ**
+Покупка: {$entityNBU->getSale()} 
+Продажа: {$entityNBU->getBuy()} 
 
 Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
     }
-
-    /**
-     *
-     **НБУ**
-    Покупка: {$exchange[Minfin::NBU]['usd']['bid']}
-    Продажа: {$exchange[Minfin::NBU]['usd']['ask']}
-     */
 }

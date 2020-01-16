@@ -2,7 +2,6 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Currency\CurrencyEntity;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Minfin extends ApiWrapper
@@ -29,35 +28,10 @@ class Minfin extends ApiWrapper
 
     /**
      * @param string $source
-     * @return string
+     * @return CurrencyContent
      * @throws GuzzleException
      * @throws \ReflectionException
      */
-    public function getContents(string $source): string
-    {
-        $route = $this->routes[$source];
-        $key = $this->getCacheSlug($source);
-        if ($this->cache()->exists($key)) {
-            $result = $this->cache()->get($key);
-        } else {
-            $logger = $this->requestLogger($this->getShortName());
-            $logger->info($key);
-            $result = $this->client->request(
-                'GET',
-                $this->host . $route . $this->token,
-                [
-                    'headers' => [
-                        'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-                        'test' => 'true'
-                    ]
-                ]
-            )->getBody()->getContents();
-            $this->cache()->set($key, $result, 'EX', 300);
-        }
-
-        return $result;
-    }
-
     public function freshCurrency(string $source): CurrencyContent
     {
         $route = $this->routes[$source];
@@ -84,15 +58,6 @@ class Minfin extends ApiWrapper
         return $this;
     }
 
-    public function getCurrencyList(): array
-    {
-        return [
-            self::BANKS => $this->getCurrencyBanks(),
-            self::NBU => $this->getCurrencyNBU(),
-            self::MB => $this->getCurrencyMB(),
-        ];
-    }
-
 
     /**
      * @param string $data
@@ -108,36 +73,6 @@ class Minfin extends ApiWrapper
         }
 
         return array_reverse($array);
-    }
-
-    /**
-     * @return array
-     * @throws \Exception
-     * @throws GuzzleException
-     */
-    public function getCurrencyMB(): array
-    {
-        return $this->formatData($this->getContents(self::MB));
-    }
-
-    /**
-     * @return array
-     * @throws \Exception
-     * @throws GuzzleException
-     */
-    public function getCurrencyNBU(): array
-    {
-        return $this->formatData($this->getContents(self::NBU));
-    }
-
-    /**
-     * @return array
-     * @throws \Exception
-     * @throws GuzzleException
-     */
-    public function getCurrencyBanks(): array
-    {
-        return $this->formatData($this->getContents(self::BANKS));
     }
 
     /**
@@ -163,13 +98,13 @@ class Minfin extends ApiWrapper
      */
     public function getBuy(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['ask'] ?? 0;
+        return $this->getFresh()[$currency]['bid'] ?? 0;
     }
 
     /**
      * @return array
      */
-    public function getFresh(): array
+    protected function getFresh(): array
     {
         return $this->fresh;
     }
@@ -177,7 +112,7 @@ class Minfin extends ApiWrapper
     /**
      * @param array $fresh
      */
-    public function setFresh(array $fresh): void
+    protected function setFresh(array $fresh): void
     {
         $this->fresh = $fresh;
     }

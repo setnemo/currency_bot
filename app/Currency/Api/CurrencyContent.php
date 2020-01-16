@@ -7,10 +7,10 @@ use CurrencyUaBot\Currency\CurrencyEntity;
 interface CurrencyContent
 {
     /**
-     * @param string $route
-     * @return string
+     * @param string $source
+     * @return CurrencyContent
      */
-    public function getContents(string $route): string;
+    public function freshCurrency(string $source): CurrencyContent;
 
     /**
      * @param string|null $currency
