@@ -2,8 +2,6 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use GuzzleHttp\Exception\GuzzleException;
-
 class Minfin extends ApiWrapper
 {
     public const MB = 'megbank';
@@ -19,44 +17,14 @@ class Minfin extends ApiWrapper
         self::BANKS => 'summary/',
     ];
 
-    function init()
+    /**
+     * Init Minfin
+     */
+    function init(): void
     {
         $this->setToken(getenv('EX_TOKEN2'));
         $this->setHost('http://api.minfin.com.ua/');
     }
-
-    /**
-     * @param string $source
-     * @return CurrencyContent
-     * @throws GuzzleException
-     * @throws \ReflectionException
-     */
-    public function freshCurrency(string $source): CurrencyContent
-    {
-        $route = $this->routes[$source];
-        $key = $this->getCacheSlug($source);
-        if ($this->cache()->exists($key)) {
-            $result = $this->cache()->get($key);
-        } else {
-            $logger = $this->requestLogger($this->getShortName());
-            $logger->info($key);
-            $result = $this->client->request(
-                'GET',
-                $this->host . $route . $this->token,
-                [
-                    'headers' => [
-                        'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-                        'test' => 'true'
-                    ]
-                ]
-            )->getBody()->getContents();
-            $this->cache()->set($key, $result, 'EX', 300);
-        }
-
-        $this->setFresh($this->formatData($result));
-        return $this;
-    }
-
 
     /**
      * @param string $data
@@ -76,12 +44,10 @@ class Minfin extends ApiWrapper
 
     /**
      * @param string $token
-     * @return Minfin
      */
-    public function setToken(string $token): Minfin
+    public function setToken(string $token): void
     {
         $this->token = $token;
-        return $this;
     }
 
     /**
@@ -100,4 +66,11 @@ class Minfin extends ApiWrapper
         return $this->getFresh()[$currency]['bid'] ?? 1;
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function getRoute(string $source): string
+    {
+        return $this->host . $this->routes[$source] . $this->token;
+    }
 }
