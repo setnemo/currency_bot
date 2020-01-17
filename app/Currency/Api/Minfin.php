@@ -55,7 +55,12 @@ class Minfin extends ApiWrapper
      */
     public function getSale(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['ask'] ?? 1;
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['ask']) && $fresh[$currency]['ask'] > 0 ) {
+            return $fresh[$currency]['ask'];
+        }
+
+        throw new \Exception("{$currency} not found in {$this->getShortName()}");
     }
 
     /**
@@ -63,7 +68,12 @@ class Minfin extends ApiWrapper
      */
     public function getBuy(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['bid'] ?? 1;
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['bid']) && $fresh[$currency]['bid'] > 0 ) {
+            return $fresh[$currency]['bid'];
+        }
+
+        throw new \Exception("{$currency} not found in {$this->getShortName()}");
     }
 
     /**

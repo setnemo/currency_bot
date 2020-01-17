@@ -45,29 +45,20 @@ class InlinequeryCommand extends SystemCommand
         $query        = $inline_query->getQuery();
         $data         = ['inline_query_id' => $inline_query->getId()];
         $results      = [];
+        $case         = 'Monobank'; // need get from settings_users table;
 
         /** @TODO Need refactor */
         if ($query !== '') {
-            if (is_numeric($query) && $query > 0 ||
-                stripos($query, 'usd') !== false && intval(substr(trim($query), 4)) > 0 ||
-                stripos($query, 'rub') !== false && intval(substr(trim($query), 4)) > 0 ||
-                stripos($query, 'eur') !== false && intval(substr(trim($query), 4)) > 0
-            ) {
-
-                if (stripos($query, 'usd') !== false ||
-                    stripos($query, 'rub') !== false ||
-                    stripos($query, 'eur') !== false
-                ) {
+            if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {
+                if ($query > 0) {
+                    $curr = 'usd';
+                } else {
                     $curr = trim(strtolower(substr($query, 0, 3)));
                     $query = intval(substr($query, 4));
-                } else {
-                    $curr = 'usd';
                 }
                 try {
 //                    $entity = (new Minfin(new Client()))->freshCurrency(Minfin::MB);
                     $entity = (new Monobank(new Client()))->freshCurrency();
-//                    $mono = (new Monobank(new Client()))->getContents();
-//                    \Longman\TelegramBot\TelegramLog::error('mono', [$mono]);
                 } catch (\Exception $e) {
                     \Longman\TelegramBot\TelegramLog::error($e->getMessage());
                     return false;

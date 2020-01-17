@@ -25,7 +25,7 @@ abstract class ApiWrapper implements CurrencyContent
     abstract protected function init(): void;
 
     /**
-     * Get route for necessary endpoint
+     * Get route for required api endpoint
      *
      * @param string $source
      * @return string

@@ -21,7 +21,14 @@ class Monobank extends ApiWrapper
      */
     public function getSale(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['rateSell'] ?? 1;
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['rateSell']) && $fresh[$currency]['rateSell'] > 0 ) {
+            return $fresh[$currency]['rateSell'];
+        } elseif (isset($fresh[$currency]['rateCross']) && $fresh[$currency]['rateCross'] > 0) {
+            return $fresh[$currency]['rateCross'];
+        }
+
+        throw new \Exception("{$currency} not found in {$this->getShortName()}");
     }
 
     /**
@@ -29,7 +36,14 @@ class Monobank extends ApiWrapper
      */
     public function getBuy(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['rateBuy'] ?? 1;
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['rateBuy']) && $fresh[$currency]['rateBuy'] > 0) {
+            return $fresh[$currency]['rateBuy'];
+        } elseif (isset($fresh[$currency]['rateCross']) && $fresh[$currency]['rateCross'] > 0) {
+            return $fresh[$currency]['rateCross'];
+        }
+
+        throw new \Exception("{$currency} not found in {$this->getShortName()}");
     }
 
     /**
@@ -50,9 +64,12 @@ class Monobank extends ApiWrapper
         $items = \GuzzleHttp\json_decode($data, true);
 
         foreach ($items as $item) {
-            $array[
+            // save only UAH to *** exchange, without USD to EUR, etc.
+            if ((string)$item['currencyCodeB'] == '980') {
+                $array[
                 strtolower("{$this->getCurrencyAlphabeticCode((int)$item['currencyCodeA'])}")
-            ] = $item;
+                ] = $item;
+            }
         }
 
         return $array;
