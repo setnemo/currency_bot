@@ -2,51 +2,44 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Currency\CurrencyEntity;
+use CurrencyUaBot\Helpers\CurrencyConvertable;
 
 class Monobank extends ApiWrapper
 {
+    use CurrencyConvertable;
 
     function init()
     {
         $this->setHost('https://api.monobank.ua/');
     }
 
-//    /**
-//     * @param string $source
-//     * @return string
-//     * @throws \GuzzleHttp\Exception\GuzzleException
-//     * @throws \ReflectionException
-//     */
-//    public function getContents(string $source = 'all'): string
-//    {
-//        $key = $this->getCacheSlug($source);
-//        if ($this->cache()->exists($key)) {
-//            $result = $this->cache()->get($key);
-//        } else {
-//            $logger = $this->requestLogger($this->getShortName());
-//            $logger->info($key);
-//            $result = $this->client->request(
-//                'GET',
-//                $this->host . 'bank/currency',
-//                [
-//                    'headers' => [
-//                        'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
-////                        'test' => 'true'
-//                    ]
-//                ]
-//            )->getBody()->getContents();
-//            $this->cache()->set($key, $result, 'EX', 300);
-//        }
-//
-//        return $result;
-//    }
     /**
      * @inheritDoc
      */
-    public function freshCurrency(string $source): CurrencyContent
+    public function freshCurrency(string $source = 'all'): CurrencyContent
     {
-        // TODO: Implement freshCurrency() method.
+        $key = $this->getCacheSlug($source);
+        if ($this->cache()->exists($key)) {
+            $result = $this->cache()->get($key);
+        } else {
+            $logger = $this->requestLogger($this->getShortName());
+            $logger->info($key);
+            $result = $this->client->request(
+                'GET',
+                $this->host . 'bank/currency',
+                [
+                    'headers' => [
+                        'User-Agent' => 'USD2UAH_bot/1.0 (https://t.me/USD2UAH_bot)',
+                        'test' => 'true'
+                    ]
+                ]
+            )->getBody()->getContents();
+            $this->cache()->set($key, $result, 'EX', 300);
+        }
+        $this->logger()->alert('first ALERT!', []);
+
+        $this->setFresh($this->formatData($result));
+        return $this;
     }
 
     /**
@@ -54,7 +47,7 @@ class Monobank extends ApiWrapper
      */
     public function getSale(string $currency = null): float
     {
-        // TODO: Implement getSale() method.
+        return $this->getFresh()[$currency]['rateSell'] ?? 1;
     }
 
     /**
@@ -62,6 +55,25 @@ class Monobank extends ApiWrapper
      */
     public function getBuy(string $currency = null): float
     {
-        // TODO: Implement getBuy() method.
+        return $this->getFresh()[$currency]['rateBuy'] ?? 1;
+    }
+
+    /**
+     * @param string $data
+     * @return array
+     * @throws \Exception
+     */
+    protected function formatData(string $data): array
+    {
+        $array = [];
+        $items = \GuzzleHttp\json_decode($data, true);
+        foreach ($items as $item) {
+            $array[
+                strtolower("{$this->getCurrencyAlphabeticCode((int)$item['currencyCodeA'])}")
+            ] = $item;
+        }
+
+        $this->logger()->alert('ALERT!', $array);
+        return $array;
     }
 }

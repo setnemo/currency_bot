@@ -15,6 +15,7 @@ abstract class ApiWrapper implements CurrencyContent
     protected $host = '';
     /** @var ClientInterface */
     protected $client;
+    protected $fresh = [];
 
     /**
      * ApiProvider constructor.
@@ -45,5 +46,21 @@ abstract class ApiWrapper implements CurrencyContent
         }
 
         return new CurrencyEntity($name, $currency, $this->getSale($currency), $this->getBuy($currency));
+    }
+
+    /**
+     * @param array $fresh
+     */
+    protected function setFresh(array $fresh): void
+    {
+        $this->fresh = $fresh;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFresh(): array
+    {
+        return $this->fresh;
     }
 }

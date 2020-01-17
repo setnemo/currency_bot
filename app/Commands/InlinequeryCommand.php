@@ -64,7 +64,8 @@ class InlinequeryCommand extends SystemCommand
                     $curr = 'usd';
                 }
                 try {
-                    $entity = (new Minfin(new Client()))->freshCurrency(Minfin::MB);
+//                    $entity = (new Minfin(new Client()))->freshCurrency(Minfin::MB);
+                    $entity = (new Monobank(new Client()))->freshCurrency();
 //                    $mono = (new Monobank(new Client()))->getContents();
 //                    \Longman\TelegramBot\TelegramLog::error('mono', [$mono]);
                 } catch (\Exception $e) {

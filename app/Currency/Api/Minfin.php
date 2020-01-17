@@ -11,7 +11,6 @@ class Minfin extends ApiWrapper
     public const BANKS = 'banks';
 
     protected $token = '';
-    protected $fresh = [];
 
     /** @var array */
     protected $routes = [
@@ -90,7 +89,7 @@ class Minfin extends ApiWrapper
      */
     public function getSale(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['ask'] ?? 0;
+        return $this->getFresh()[$currency]['ask'] ?? 1;
     }
 
     /**
@@ -98,22 +97,7 @@ class Minfin extends ApiWrapper
      */
     public function getBuy(string $currency = null): float
     {
-        return $this->getFresh()[$currency]['bid'] ?? 0;
+        return $this->getFresh()[$currency]['bid'] ?? 1;
     }
 
-    /**
-     * @return array
-     */
-    protected function getFresh(): array
-    {
-        return $this->fresh;
-    }
-
-    /**
-     * @param array $fresh
-     */
-    protected function setFresh(array $fresh): void
-    {
-        $this->fresh = $fresh;
-    }
 }
