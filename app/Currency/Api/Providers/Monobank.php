@@ -1,7 +1,8 @@
 <?php
 
-namespace CurrencyUaBot\Currency\Api;
+namespace CurrencyUaBot\Currency\Api\Providers;
 
+use CurrencyUaBot\Currency\Api\ApiWrapper;
 use CurrencyUaBot\Helpers\CurrencyConvertable;
 
 class Monobank extends ApiWrapper

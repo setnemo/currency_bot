@@ -1,6 +1,8 @@
 <?php
 
-namespace CurrencyUaBot\Currency\Api;
+namespace CurrencyUaBot\Currency\Api\Providers;
+
+use CurrencyUaBot\Currency\Api\ApiWrapper;
 
 class Minfin extends ApiWrapper
 {
@@ -22,13 +24,12 @@ class Minfin extends ApiWrapper
      */
     function init(): void
     {
-        $this->setToken(getenv('EX_TOKEN2'));
+        $this->token = getenv('EX_TOKEN2');
         $this->setHost('http://api.minfin.com.ua/');
     }
 
     /**
-     * @param string $data
-     * @return array
+     * @inheritDoc
      */
     protected function formatData(string $data): array
     {
@@ -40,14 +41,6 @@ class Minfin extends ApiWrapper
         }
 
         return array_reverse($array);
-    }
-
-    /**
-     * @param string $token
-     */
-    public function setToken(string $token): void
-    {
-        $this->token = $token;
     }
 
     /**
