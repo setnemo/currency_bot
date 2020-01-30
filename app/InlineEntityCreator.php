@@ -32,7 +32,7 @@ class InlineEntityCreator
     {
         $this->id += 1;
         return new InlineQueryResultArticle([
-            'id'                    => sprintf('%04d', $this->id),
+            'id'                    => sprintf('%004d', $this->id),
             'title'                 => $title,
             'description'           => $description,
             'input_message_content' => new InputTextMessageContent([

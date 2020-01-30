@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
 final class CurrencyContentStaticFactory
 {
     public const MONOBANK = 'Monobank';
-    public const MINFIN_MB = 'Minfin::megbank';
+    public const MINFIN_MB = 'Minfin_megbank';
 
     public const ALLOWED_API = [
         self::MONOBANK,
@@ -29,6 +29,21 @@ final class CurrencyContentStaticFactory
             throw new \Exception("API $type not allowed");
         }
 
+        $client = self::getClient();
+
+        if ($type === self::MONOBANK) {
+            return (new Monobank($client))->freshCurrency();
+        } elseif ($type === self::MINFIN_MB) {
+            return (new Minfin($client, Minfin::MB))->freshCurrency(Minfin::MB);
+        }
+    }
+
+    /**
+     * @return Client|mixed
+     * @throws \Exception
+     */
+    private static function getClient()
+    {
         $name = 'guzzle';
         if (!App::exist($name)) {
             $client = new Client();
@@ -36,11 +51,6 @@ final class CurrencyContentStaticFactory
         } else {
             $client = App::get($name);
         }
-
-        if ($type === self::MONOBANK) {
-            return (new Monobank($client))->freshCurrency();
-        } elseif ($type === self::MINFIN_MB) {
-            return (new Minfin($client))->freshCurrency(Minfin::MB);
-        }
+        return $client;
     }
 }

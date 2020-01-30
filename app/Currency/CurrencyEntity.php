@@ -53,4 +53,12 @@ class CurrencyEntity
             "buy" => $this->buy,
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getSource(): string
+    {
+        return $this->source;
+    }
 }

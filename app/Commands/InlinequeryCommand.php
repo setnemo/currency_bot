@@ -52,12 +52,12 @@ class InlinequeryCommand extends SystemCommand
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {
                 if ($query > 0) {
-                    $curr = 'usd';
+                    $currency = 'usd';
                 } else {
-                    $curr = trim(strtolower(substr($query, 0, 3)));
+                    $currency = trim(strtolower(substr($query, 0, 3)));
                     $query = intval(substr($query, 4));
                 }
-                $this->fillResults($this->getArticles($case, $curr, $query), $results);
+                $this->fillResults($this->getArticles($case, $currency, $query), $results);
             }
         }
         $data['results'] = '[' . implode(',', $results) . ']';
@@ -66,40 +66,39 @@ class InlinequeryCommand extends SystemCommand
     }
 
     /**
-     * @param string $mb
+     * @param string $title
      * @param string $desc
      * @return InlineQueryResultArticle
      */
-    private function getFillTemplate(string $mb, string $desc): InlineQueryResultArticle
+    private function getFillTemplate(string $title, string $desc): InlineQueryResultArticle
     {
-        return InlineEntityCreator::getInstance()->fillTemplate($mb, $desc, $mb . PHP_EOL . $desc);
+        return InlineEntityCreator::getInstance()->fillTemplate($title, $desc, $title . PHP_EOL . $desc);
     }
 
     /**
-     * @param string $curr
+     * @param string $currency
      * @param string $query
      * @param CurrencyContent $entity
      * @return array
      */
-    private function fillArticles(string $curr, string $query, CurrencyContent $entity): array
+    private function fillArticles(string $currency, string $query, CurrencyContent $entity): array
     {
-        $pre = ' ' . strtoupper($curr);
+        $pre = ' ' . strtoupper($currency);
         /** @TODO Need refactor */
-        $mb2 = 'Межбанк, продать' . $pre;
-        $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $entity->getBuy($curr));
-//        $mb1 = 'Межбанк, продать' . $pre;
-//        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $entity->getBuy($curr));
-//        $mb3 = 'Межбанк, купить' . $pre;
-//        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($curr), $entity->getSale($curr));
-        $mb4 = 'Межбанк, купить' . $pre;
-        $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($curr), 'UAH', $entity->getSale($curr));
-        $articles = [
-            $this->getFillTemplate($mb4, $desc4, $entity->getSale($curr)),
-//            $this->getFillTemplate($mb3, $desc3, $entity->getSale($curr)),
-            $this->getFillTemplate($mb2, $desc2, $entity->getBuy($curr)),
-//            $this->getFillTemplate($mb1, $desc1, $entity->getBuy($curr)),
+        $mb2 = "{$entity->getSourceName()}, продать" . $pre;
+        $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getBuy($currency));
+        $mb1 = "{$entity->getSourceName()}, продать" . $pre;
+        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getBuy($currency));
+        $mb3 = "{$entity->getSourceName()}, купить" . $pre;
+        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getSale($currency));
+        $mb4 = "{$entity->getSourceName()}, купить" . $pre;
+        $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getSale($currency));
+        return [
+            $this->getFillTemplate($mb4, $desc4),
+            $this->getFillTemplate($mb3, $desc3),
+            $this->getFillTemplate($mb2, $desc2),
+            $this->getFillTemplate($mb1, $desc1),
         ];
-        return $articles;
     }
 
     /**

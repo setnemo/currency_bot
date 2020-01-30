@@ -38,4 +38,9 @@ interface CurrencyContent
      */
     public function getBuy(string $currency = null): float;
 
+    /**
+     * @return string
+     */
+    public function getSourceName(): string;
+
 }
