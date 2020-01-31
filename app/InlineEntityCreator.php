@@ -7,9 +7,13 @@ use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;
 
 class InlineEntityCreator
 {
+    private static $instance = null;
     protected $id = 0;
 
-    private static $instance = null;
+    private function __construct()
+    {
+        //
+    }
 
     /**
      * @return InlineEntityCreator
@@ -32,20 +36,15 @@ class InlineEntityCreator
     {
         $this->id += 1;
         return new InlineQueryResultArticle([
-            'id'                    => sprintf('%004d', $this->id),
-            'title'                 => $title,
-            'description'           => $description,
+            'id' => sprintf('%004d', $this->id),
+            'title' => $title,
+            'description' => $description,
             'input_message_content' => new InputTextMessageContent([
                 'message_text' => $message,
                 'parse_mode' => 'HTML',
                 'disable_web_page_preview' => true,
             ]),
         ]);
-    }
-
-    private function __construct()
-    {
-        //
     }
 
     private function __clone()

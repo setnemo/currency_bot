@@ -6,7 +6,10 @@ use CurrencyUaBot\Core\App;
 use CurrencyUaBot\Currency\Api\CurrencyContent;
 use CurrencyUaBot\Currency\Api\Providers\Minfin;
 use CurrencyUaBot\Currency\Api\Providers\Monobank;
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use ReflectionException;
 
 final class CurrencyContentStaticFactory
 {
@@ -21,12 +24,14 @@ final class CurrencyContentStaticFactory
     /**
      * @param string $type
      * @return CurrencyContent
-     * @throws \Exception
+     * @throws GuzzleException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public static function factory(string $type): CurrencyContent
     {
-        if (!in_array($type,self::ALLOWED_API)) {
-            throw new \Exception("API $type not allowed");
+        if (!in_array($type, self::ALLOWED_API)) {
+            throw new Exception("API $type not allowed");
         }
 
         $client = self::getClient();
@@ -39,10 +44,10 @@ final class CurrencyContentStaticFactory
     }
 
     /**
-     * @return Client|mixed
-     * @throws \Exception
+     * @return Client
+     * @throws Exception
      */
-    private static function getClient()
+    private static function getClient(): Client
     {
         $name = 'guzzle';
         if (!App::exist($name)) {

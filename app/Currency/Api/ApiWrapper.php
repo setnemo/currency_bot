@@ -2,12 +2,13 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
-use CurrencyUaBot\Currency\Api\Providers\Monobank;
 use CurrencyUaBot\Currency\CurrencyEntity;
 use CurrencyUaBot\Helpers\Cacheable;
 use CurrencyUaBot\Helpers\Logable;
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use ReflectionException;
 
 abstract class ApiWrapper implements CurrencyContent
 {
@@ -23,32 +24,11 @@ abstract class ApiWrapper implements CurrencyContent
     private $sourceName = '';
 
     /**
-     * Init class
-     */
-    abstract protected function init(): void;
-
-    /**
-     * Get route for required api endpoint
-     *
-     * @param string $source
-     * @return string
-     */
-    abstract protected function getRoute(string $source): string;
-
-    /**
-     * Formatting api response
-     *
-     * @param string $data
-     * @return array
-     */
-    abstract protected function formatData(string $data): array;
-
-    /**
      * ApiWrapper constructor
      *
      * @param ClientInterface $client
      * @param string|null $sourceName
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __construct(ClientInterface $client, string $sourceName = null)
     {
@@ -57,6 +37,11 @@ abstract class ApiWrapper implements CurrencyContent
         $this->sourceName = $this->getShortName() . $detailsName;
         $this->init();
     }
+
+    /**
+     * Init class
+     */
+    abstract protected function init(): void;
 
     /**
      * @param string $host
@@ -68,6 +53,8 @@ abstract class ApiWrapper implements CurrencyContent
 
     /**
      * @inheritDoc
+     * @throws ReflectionException
+     * @throws GuzzleException
      */
     public function freshCurrency(string $source = 'all'): CurrencyContent
     {
@@ -79,23 +66,16 @@ abstract class ApiWrapper implements CurrencyContent
     }
 
     /**
-     * @inheritDoc
-     * @throws \Exception
+     * Get route for required api endpoint
+     *
+     * @param string $source
+     * @return string
      */
-    public function getCurrency(string $currency = null): CurrencyEntity
-    {
-        $name = $this->getShortName();
-        if (!$currency) {
-            $this->logger()->warning("$name try get currency without require param");
-            throw new \Exception("$name try get currency without require param");
-        }
-
-        return new CurrencyEntity($name, $currency, $this->getSale($currency), $this->getBuy($currency));
-    }
+    abstract protected function getRoute(string $source): string;
 
     /**
      * @inheritDoc
-     * @throws \Exception
+     * @throws Exception
      * @throws GuzzleException
      */
     public function getContent(string $key, string $route, string $method = 'GET'): string
@@ -121,6 +101,29 @@ abstract class ApiWrapper implements CurrencyContent
     }
 
     /**
+     * Formatting api response
+     *
+     * @param string $data
+     * @return array
+     */
+    abstract protected function formatData(string $data): array;
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    public function getCurrency(string $currency = null): CurrencyEntity
+    {
+        $name = $this->getShortName();
+        if (!$currency) {
+            $this->logger()->warning("$name try get currency without require param");
+            throw new Exception("$name try get currency without require param");
+        }
+
+        return new CurrencyEntity($name, $currency, $this->getSale($currency), $this->getBuy($currency));
+    }
+
+    /**
      * @inheritDoc
      */
     public function getSourceName(): string
@@ -129,18 +132,18 @@ abstract class ApiWrapper implements CurrencyContent
     }
 
     /**
-     * @param array $fresh
-     */
-    protected function setFresh(array $fresh): void
-    {
-        $this->fresh = $fresh;
-    }
-
-    /**
      * @return array
      */
     protected function getFresh(): array
     {
         return $this->fresh;
+    }
+
+    /**
+     * @param array $fresh
+     */
+    protected function setFresh(array $fresh): void
+    {
+        $this->fresh = $fresh;
     }
 }

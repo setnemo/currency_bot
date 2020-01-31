@@ -1,12 +1,17 @@
 <?php
 
-namespace CurrencyUaBot\Cache;
+namespace CurrencyUaBot\Core;
 
 use Predis\Client;
 
 class RedisStorage
 {
     private static $redis = null;
+
+    private function __construct()
+    {
+        //
+    }
 
     /**
      * @return Client
@@ -17,11 +22,6 @@ class RedisStorage
             self::$redis = new Client();
         }
         return static::$redis;
-    }
-
-    private function __construct()
-    {
-        //
     }
 
     private function __clone()

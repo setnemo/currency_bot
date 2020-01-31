@@ -3,6 +3,7 @@
 namespace CurrencyUaBot\Currency\Api\Providers;
 
 use CurrencyUaBot\Currency\Api\ApiWrapper;
+use Exception;
 
 class Minfin extends ApiWrapper
 {
@@ -30,6 +31,34 @@ class Minfin extends ApiWrapper
 
     /**
      * @inheritDoc
+     * @throws Exception
+     */
+    public function getSale(string $currency = null): float
+    {
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['ask']) && $fresh[$currency]['ask'] > 0) {
+            return $fresh[$currency]['ask'];
+        }
+
+        throw new Exception("{$currency} not found in {$this->getShortName()}");
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    public function getBuy(string $currency = null): float
+    {
+        $fresh = $this->getFresh();
+        if (isset($fresh[$currency]['bid']) && $fresh[$currency]['bid'] > 0) {
+            return $fresh[$currency]['bid'];
+        }
+
+        throw new Exception("{$currency} not found in {$this->getShortName()}");
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function formatData(string $data): array
     {
@@ -41,32 +70,6 @@ class Minfin extends ApiWrapper
         }
 
         return array_reverse($array);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getSale(string $currency = null): float
-    {
-        $fresh = $this->getFresh();
-        if (isset($fresh[$currency]['ask']) && $fresh[$currency]['ask'] > 0 ) {
-            return $fresh[$currency]['ask'];
-        }
-
-        throw new \Exception("{$currency} not found in {$this->getShortName()}");
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBuy(string $currency = null): float
-    {
-        $fresh = $this->getFresh();
-        if (isset($fresh[$currency]['bid']) && $fresh[$currency]['bid'] > 0 ) {
-            return $fresh[$currency]['bid'];
-        }
-
-        throw new \Exception("{$currency} not found in {$this->getShortName()}");
     }
 
     /**
