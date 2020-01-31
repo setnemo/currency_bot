@@ -4,12 +4,15 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use CurrencyUaBot\Currency\Api\CurrencyContent;
 use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
+use CurrencyUaBot\Message\InlineEntityCreator;
+use CurrencyUaBot\Message\MessageCreator;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Request;
-use CurrencyUaBot\Currency\MessageCreator;
-use CurrencyUaBot\InlineEntityCreator;
+use Longman\TelegramBot\TelegramLog;
 
 /**
  * Inline query command
@@ -41,13 +44,13 @@ class InlinequeryCommand extends SystemCommand
     public function execute()
     {
         $inline_query = $this->getInlineQuery();
-        $query        = $inline_query->getQuery();
-        $data         = ['inline_query_id' => $inline_query->getId()];
-        $results      = [];
-        $case         = [
+        $query = $inline_query->getQuery();
+        $data = ['inline_query_id' => $inline_query->getId()];
+        $results = [];
+        $case = [
             CurrencyContentStaticFactory::MONOBANK,
             CurrencyContentStaticFactory::MINFIN_MB,
-        ]; // need get from settings_users table;
+        ]; // @TODO need get from settings_users table;
 
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {
@@ -66,13 +69,36 @@ class InlinequeryCommand extends SystemCommand
     }
 
     /**
-     * @param string $title
-     * @param string $desc
-     * @return InlineQueryResultArticle
+     * @param array $articles
+     * @param array $results
      */
-    private function getFillTemplate(string $title, string $desc): InlineQueryResultArticle
+    private function fillResults(array $articles, array &$results): void
     {
-        return InlineEntityCreator::getInstance()->fillTemplate($title, $desc, $title . PHP_EOL . $desc);
+        foreach ($articles as $article) {
+            $results[] = $article;
+        }
+    }
+
+    /**
+     * @param array $case
+     * @param string $curr
+     * @param string $query
+     * @return array
+     * @throws GuzzleException
+     */
+    private function getArticles(array $case, string $curr, string $query): array
+    {
+        $articles = [];
+        foreach ($case as $type) {
+            try {
+                $entity = CurrencyContentStaticFactory::factory($type);
+                $articles = array_merge($this->fillArticles($curr, $query, $entity), $articles);
+            } catch (Exception $e) {
+                TelegramLog::notice($e->getMessage());
+                continue;
+            }
+        }
+        return $articles;
     }
 
     /**
@@ -102,34 +128,12 @@ class InlinequeryCommand extends SystemCommand
     }
 
     /**
-     * @param array $case
-     * @param string $curr
-     * @param string $query
-     * @return array
+     * @param string $title
+     * @param string $desc
+     * @return InlineQueryResultArticle
      */
-    private function getArticles(array $case, string $curr, string $query): array
+    private function getFillTemplate(string $title, string $desc): InlineQueryResultArticle
     {
-        $articles = [];
-        foreach ($case as $type) {
-            try {
-                $entity = CurrencyContentStaticFactory::factory($type);
-                $articles = array_merge($this->fillArticles($curr, $query, $entity), $articles);
-            } catch (\Exception $e) {
-                \Longman\TelegramBot\TelegramLog::notice($e->getMessage());
-                continue;
-            }
-        }
-        return $articles;
-    }
-
-    /**
-     * @param array $articles
-     * @param array $results
-     */
-    private function fillResults(array $articles, array &$results): void
-    {
-        foreach ($articles as $article) {
-            $results[] = $article;
-        }
+        return InlineEntityCreator::getInstance()->fillTemplate($title, $desc, $title . PHP_EOL . $desc);
     }
 }

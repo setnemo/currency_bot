@@ -2,8 +2,8 @@
 
 namespace CurrencyUaBot\Core;
 
-use CurrencyUaBot\Helpers\Cacheable;
-use CurrencyUaBot\Helpers\Logable;
+use CurrencyUaBot\Traits\Cacheable;
+use CurrencyUaBot\Traits\Logable;
 use Exception;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Telegram;
@@ -40,11 +40,10 @@ class TelegramWrapper
     }
 
     /**
-     * @return TelegramWrapper
      * @throws TelegramException
      * @throws Exception
      */
-    public function init(): TelegramWrapper
+    public function init(): void
     {
         $this->bot = new Telegram($this->token, $this->botName);
         $this->register($this->botName);

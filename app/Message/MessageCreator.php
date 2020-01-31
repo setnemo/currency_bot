@@ -1,6 +1,6 @@
 <?php
 
-namespace CurrencyUaBot\Currency;
+namespace CurrencyUaBot\Message;
 
 class MessageCreator
 {

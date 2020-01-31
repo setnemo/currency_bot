@@ -3,7 +3,7 @@
 namespace CurrencyUaBot\Currency\Api\Providers;
 
 use CurrencyUaBot\Currency\Api\ApiWrapper;
-use CurrencyUaBot\Helpers\CurrencyConvertable;
+use CurrencyUaBot\Traits\CurrencyConvertable;
 use Exception;
 
 class Monobank extends ApiWrapper

@@ -1,6 +1,6 @@
 <?php
 
-namespace CurrencyUaBot;
+namespace CurrencyUaBot\Message;
 
 use Longman\TelegramBot\Entities\InlineQuery\InlineQueryResultArticle;
 use Longman\TelegramBot\Entities\InputMessageContent\InputTextMessageContent;

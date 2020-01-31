@@ -1,6 +1,6 @@
 <?php
 
-namespace CurrencyUaBot\Helpers;
+namespace CurrencyUaBot\Traits;
 
 use CurrencyUaBot\Core\App;
 use Monolog\Handler\StreamHandler;

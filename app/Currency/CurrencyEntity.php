@@ -2,7 +2,7 @@
 
 namespace CurrencyUaBot\Currency;
 
-use CurrencyUaBot\Helpers\Cacheable;
+use CurrencyUaBot\Traits\Cacheable;
 
 class CurrencyEntity
 {

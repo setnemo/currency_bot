@@ -1,6 +1,6 @@
 <?php
 
-namespace CurrencyUaBot\Helpers;
+namespace CurrencyUaBot\Traits;
 
 use Predis\Client;
 use CurrencyUaBot\Core\App;

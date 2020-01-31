@@ -18,6 +18,9 @@ class App
      */
     public static function run(string $projectPath): void
     {
+        /**
+         * Init Core
+         */
         $env = Dotenv::createImmutable($projectPath);
         $env->load();
         $token = getenv('TG_TOKEN');
@@ -29,12 +32,15 @@ class App
             $logger->pushHandler(new StreamHandler(App::get('log_path') . 'debug.log', Logger::DEBUG));
         } catch (Exception $e) {
             $logger->error($e->getMessage());
-            return ;
+            return;
         }
-
         App::bind('logger', $logger);
         App::bind('db', Connection::getInstance());
         App::bind('redis', RedisStorage::getInstance());
+
+        /**
+         * Init Telegram
+         */
         try {
             (new TelegramWrapper($projectPath, $token, $botName, $logger))->init();
         } catch (TelegramException $e) {
@@ -42,6 +48,8 @@ class App
             TelegramLog::error($e);
         } catch (Exception $exception) {
             $logger->error($exception->getMessage());
+        } catch (\Throwable $t) {
+            $logger->error($t->getMessage());
         }
     }
 

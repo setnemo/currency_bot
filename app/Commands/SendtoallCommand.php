@@ -7,6 +7,7 @@ use Longman\TelegramBot\Entities\Message;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
+
 /**
  * Admin "/sendtoall" command
  */
@@ -32,6 +33,7 @@ class SendtoallCommand extends AdminCommand
      * @var bool
      */
     protected $need_mysql = true;
+
     /**
      * Execute command
      *
@@ -49,16 +51,16 @@ class SendtoallCommand extends AdminCommand
             'sendMessage',     //callback function to execute (see Request.php methods)
             ['text' => $text], //Param to evaluate the request
             [
-                'groups'      => true,
+                'groups' => true,
                 'supergroups' => true,
-                'channels'    => false,
-                'users'       => true,
+                'channels' => false,
+                'users' => true,
             ]
         );
         if (empty($results)) {
             return $this->replyToChat('No users or chats found.');
         }
-        $total  = 0;
+        $total = 0;
         $failed = 0;
         $text = 'Message sent to:' . PHP_EOL;
         foreach ($results as $result) {
@@ -68,7 +70,7 @@ class SendtoallCommand extends AdminCommand
                 $status = '✔️';
                 /** @var Message $message */
                 $message = $result->getResult();
-                $chat    = $message->getChat();
+                $chat = $message->getChat();
                 if ($chat->isPrivateChat()) {
                     $name = $chat->getFirstName();
                     $type = 'user';

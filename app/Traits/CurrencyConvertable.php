@@ -1,6 +1,8 @@
 <?php
 
-namespace CurrencyUaBot\Helpers;
+namespace CurrencyUaBot\Traits;
+
+use Exception;
 
 trait CurrencyConvertable
 {
@@ -1257,13 +1259,18 @@ trait CurrencyConvertable
             ],
     ];
 
+    /**
+     * @param int $code
+     * @return string
+     * @throws Exception
+     */
     protected function getCurrencyAlphabeticCode(int $code): string
     {
         if (array_key_exists("code:$code", $this->currencyCodeMapping)) {
             return $this->currencyCodeMapping["code:$code"]['aCode'] ?? '';
         }
 
-        throw new \Exception("Currency mapping ISO 4217 (without withdrawal codes) not contains $code");
+        throw new Exception("Currency mapping ISO 4217 (without withdrawal codes) not contains $code");
     }
 
 

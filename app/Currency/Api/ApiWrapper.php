@@ -3,8 +3,8 @@
 namespace CurrencyUaBot\Currency\Api;
 
 use CurrencyUaBot\Currency\CurrencyEntity;
-use CurrencyUaBot\Helpers\Cacheable;
-use CurrencyUaBot\Helpers\Logable;
+use CurrencyUaBot\Traits\Cacheable;
+use CurrencyUaBot\Traits\Logable;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
