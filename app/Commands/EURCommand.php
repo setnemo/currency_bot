@@ -2,8 +2,6 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use CurrencyUaBot\Currency\Api\Providers\Minfin;
-use GuzzleHttp\Client;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -49,18 +47,7 @@ class EURCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $exchange = (new Minfin(new Client()))->getCurrencyList();
-        $text = "
-**Курс EUR к UAH**
-**Межбанк**
-Покупка: {$exchange[Minfin::MB]['eur']['bid']} 
-Продажа: {$exchange[Minfin::MB]['eur']['ask']} 
-
-**Средний курс в банках**
-Покупка: {$exchange[Minfin::BANKS]['eur']['bid']} 
-Продажа: {$exchange[Minfin::BANKS]['eur']['ask']} 
-
-Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=EUR2UAH_bot&utm_compaign=eur_post)";
+        $text = $message->getText();
         $data = [
             'chat_id' => $chat_id,
             'text' => $text,

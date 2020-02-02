@@ -3,10 +3,12 @@
 namespace CurrencyUaBot\Core;
 
 use Slim\PDO\Database;
+use CurrencyUaBot\Core\DbRepository;
 
 class Connection
 {
     private static $connection = null;
+    private static $repository = null;
 
     private function __construct()
     {
@@ -16,7 +18,7 @@ class Connection
     /**
      * @return Database
      */
-    public static function getInstance()
+    public static function getInstance(): Database
     {
         if (static::$connection === null) {
             $dbhost = getenv('DB_HOST');
@@ -27,6 +29,14 @@ class Connection
             self::$connection = new Database($dsn, $usr, $pwd);
         }
         return static::$connection;
+    }
+
+    public static function getRepository(): DbRepository
+    {
+        if (static::$repository === null) {
+            return new DbRepository(static::getInstance());
+        }
+        return static::$repository;
     }
 
     private function __clone()
