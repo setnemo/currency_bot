@@ -3,18 +3,13 @@
 namespace Longman\TelegramBot\Commands\UserCommands;
 
 use CurrencyUaBot\Core\App;
-use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
 use CurrencyUaBot\Currency\Api\Providers\Minfin;
 use CurrencyUaBot\Currency\CurrencyEntity;
-use CurrencyUaBot\Traits\Translatable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
-use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\ServerResponse;
-use Longman\TelegramBot\Entities\User;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
 use ReflectionException;
@@ -24,22 +19,20 @@ use ReflectionException;
  *
  * Gets executed when a user first starts using the bot.
  */
-class SettingsCommand extends UserCommand
+class CurrencyCommand extends UserCommand
 {
-    use Translatable;
-
     /**
      * @var string
      */
-    protected $name = 'Settings';
+    protected $name = 'USD';
     /**
      * @var string
      */
-    protected $description = 'Settings command';
+    protected $description = 'USD command';
     /**
      * @var string
      */
-    protected $usage = '/settings';
+    protected $usage = '/currency <currency>';
     /**
      * @var string
      */
@@ -61,25 +54,31 @@ class SettingsCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $repo = Connection::getRepository();
-        /** @var User $user */
-        $user = $message->getFrom();
-        $userId = $user->getId();
-        $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
-        $lang = $config['lang'] ?? 'en';
-        $keyboard = new Keyboard(
-            [$this->t('language', $lang), $this->t('inline', $lang)],
-            [$this->t('buttons', $lang), $this->t('menu', $lang)]
-        );
-        $text = "Быстрые команды для настроек\n /lang - Сменить язык\n /cccc ....";
-        $keyboard->setResizeKeyboard(true);
+        $logger = App::get('logger');
+        $entityMB = (CurrencyContentStaticFactory::factory(CurrencyContentStaticFactory::MINFIN_MB))->getCurrency('usd');
+//        $entityMB = CurrencyContentStaticFactory::factory(CurrencyContentStaticFactory::MINFIN_BANKS);
+//        $entityBanks = (new Minfin(new Client()))->freshCurrency(Minfin::)->getCurrency('usd');
+
+        $text = $message->getText();
         $data = [
             'chat_id' => $chat_id,
             'text' => $text,
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
-            'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
+    }
+
+    public static function getExchangeTextUSDe(
+        CurrencyEntity $entityMB): string
+    {
+        return $text = "
+**Курс USD к UAH**
+**Межбанк**
+Покупка: {$entityMB->getSale()} 
+Продажа: {$entityMB->getBuy()} 
+
+
+Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
     }
 }

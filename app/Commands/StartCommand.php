@@ -4,6 +4,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use CurrencyUaBot\Core\App;
 use CurrencyUaBot\Core\Connection;
+use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\DB;
 use Longman\TelegramBot\Entities\Keyboard;
@@ -20,6 +21,8 @@ use Slim\PDO\Database;
  */
 class StartCommand extends SystemCommand
 {
+    use Translatable;
+
     /**
      * @var string
      */
@@ -64,9 +67,10 @@ class StartCommand extends SystemCommand
         /** @var User $user */
         $user = $message->getFrom();
         $userId = $user->getId();
-        $config = $repo->getConfigByIdOrCreate($userId, null);
+        $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
+        $lang = $config['lang'] ?? 'en';
         $keyboard = new Keyboard(
-            array_merge(json_decode($config['buttons']),  ['Settings'])
+            array_merge(json_decode($config['buttons']), [$this->t('settings', $lang)])
         );
         $text = json_encode($config);
         $keyboard->setResizeKeyboard(true);

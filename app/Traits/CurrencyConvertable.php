@@ -1273,5 +1273,14 @@ trait CurrencyConvertable
         throw new Exception("Currency mapping ISO 4217 (without withdrawal codes) not contains $code");
     }
 
+    protected function isCurrency(string $code): bool
+    {
+        foreach ($this->currencyCodeMapping as $item) {
+            if ($item['aCode'] === $code) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

@@ -2,14 +2,17 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use CurrencyUaBot\Traits\CurrencyConvertable;
+use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
-use Longman\TelegramBot\Telegram;
 
 class GenericmessageCommand extends SystemCommand
 {
+    use Translatable, CurrencyConvertable;
+
     protected $name = 'genericmessage';
     protected $description = 'Handle generic message';
     protected $version = '1.0.0';
@@ -24,27 +27,14 @@ class GenericmessageCommand extends SystemCommand
             $this->getMessage()->getChat()->getId(),
             $this->getName()
         );
-        if ($text === "USD") {
-            $update['message']['text'] = "EUR";
-            $new = new Update($update, $this->getName());
-            $newTg = $this->setUpdate($new);
-            $command = new GenericmessageCommand($newTg->telegram,  $new);
 
-            return $command->telegram->executeCommand("USD");
+        if ($this->isCurrency($text)) {
+            /// need save to cache
+            return $this->telegram->executeCommand('Currency');
         }
 
-        if ($text === "EUR") {
-            $update['message']['text'] = "/EUR";
-            return $this->telegram->executeCommand("EUR");
-        }
-
-        if ($text === "RUB") {
-            $update['message']['text'] = "/RUB";
-            return $this->telegram->executeCommand("RUB");
-        }
-
-        if ($text === "Settings") {
-            return $this->telegram->executeCommand("settings");
+        if ($text = $this->d($text)) {
+            return $this->telegram->executeCommand($text);
         }
 
         $conversation->stop();

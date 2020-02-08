@@ -49,6 +49,7 @@ class DbRepository
         if (!$lang || $lang === 'null') {
             $lang = 'en';
         }
+
         $result = [
             $id,
             $lang,
