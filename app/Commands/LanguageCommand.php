@@ -7,6 +7,7 @@ use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
 use CurrencyUaBot\Currency\Api\Providers\Minfin;
 use CurrencyUaBot\Currency\CurrencyEntity;
+use CurrencyUaBot\Traits\Translatable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
@@ -23,8 +24,10 @@ use ReflectionException;
  *
  * Gets executed when a user first starts using the bot.
  */
-class LangCommand extends UserCommand
+class LanguageCommand extends UserCommand
 {
+    use Translatable;
+
     /**
      * @var string
      */
@@ -36,7 +39,7 @@ class LangCommand extends UserCommand
     /**
      * @var string
      */
-    protected $usage = '/lang';
+    protected $usage = '/language';
     /**
      * @var string
      */
@@ -50,44 +53,23 @@ class LangCommand extends UserCommand
      * Command execute method
      *
      * @return ServerResponse
-     * @throws GuzzleException
      * @throws TelegramException
-     * @throws ReflectionException
      */
     public function execute()
     {
-        $message = $this->getMessage();
-        $chat_id = $message->getChat()->getId();
-        $repo = Connection::getRepository();
-        /** @var User $user */
-        $user = $message->getFrom();
-        $userId = $user->getId();
-        $config = $repo->getConfigByIdOrCreate($userId, null);
-        $keyboard = new Keyboard(
-            array_merge(json_decode($config['buttons']),  ['Settings'])
-        );
-        $text = json_encode($config);
+        $chat_id =  $this->getMessage()->getChat()->getId();
+        $userId = $this->getMessage()->getFrom()->getId();
+        $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+        $lang = $config['lang'] ?? 'en';
         $keyboard = new InlineKeyboard([
-            ['text' => 'callback', 'callback_data' => 'identifier'],
-            ['text' => 'callback', 'callback_data' => 'identifier'],
-        ], [
-            ['text' => 'callback', 'callback_data' => 'identifier'],
-            ['text' => 'callback', 'callback_data' => 'identifier'],
-        ]);
-//            ->setResizeKeyboard(true)
-//            ->setOneTimeKeyboard(true)
-//            ->setSelective(false)
-        ;
-
-//        $keyboard = Keyboard::remove();
-//        $data = [
-//            'chat_id' => $this->getMessage()->getChat()->getId(),
-//            'text'    => "Кнопки включены.",
-//            'reply_markup' => $keyboard,
-//        ];
+            ['text' => $this->t('russian', $lang), 'callback_data' => "change_lang_ru_{$userId}_{$chat_id}"],
+            ['text' => $this->t('ukrainian', $lang), 'callback_data' => "change_lang_uk_{$userId}_{$chat_id}"],
+        ],
+            [['text' => $this->t('english', $lang), 'callback_data' => "change_lang_en_{$userId}_{$chat_id}"]]
+        );
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => "Кнопки включены.",
+            'text'    => $this->t('choice_lang', $lang),
             'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);

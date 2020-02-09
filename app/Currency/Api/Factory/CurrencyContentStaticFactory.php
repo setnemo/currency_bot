@@ -14,7 +14,7 @@ use ReflectionException;
 final class CurrencyContentStaticFactory
 {
     public const MONOBANK = 'Monobank';
-    public const MINFIN_MB = 'Minfin_megbank';
+    public const MINFIN_MB = 'Minfin:megbank';
 
     public const ALLOWED_API = [
         self::MONOBANK,

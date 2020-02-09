@@ -35,4 +35,21 @@ trait Cacheable
     {
         return $name ? $name : (new \ReflectionClass($this))->getShortName();
     }
+
+    /**
+     * @param int $userId
+     * @param int|null $chatId
+     * @return array
+     * @throws \Exception
+     */
+    public function dataForLanguageUpdateCommand(int $userId, int $chatId = null): array
+    {
+        $key = "update_lang_{$userId}";
+        if (!$this->cache()->exists($key)) {
+            $this->cache()->set($key, $chatId, 'EX', 300);
+        } else {
+            $chatId = $this->cache()->get($key);
+        }
+        return ['userId' => $userId, 'chatId' => $chatId];
+    }
 }

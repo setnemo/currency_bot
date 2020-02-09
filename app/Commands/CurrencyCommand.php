@@ -2,12 +2,8 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use CurrencyUaBot\Core\App;
-use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
 use CurrencyUaBot\Currency\Api\Providers\Minfin;
-use CurrencyUaBot\Currency\CurrencyEntity;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
@@ -24,11 +20,11 @@ class CurrencyCommand extends UserCommand
     /**
      * @var string
      */
-    protected $name = 'USD';
+    protected $name = 'Currency';
     /**
      * @var string
      */
-    protected $description = 'USD command';
+    protected $description = 'Currency command';
     /**
      * @var string
      */
@@ -46,7 +42,6 @@ class CurrencyCommand extends UserCommand
      * Command execute method
      *
      * @return ServerResponse
-     * @throws GuzzleException
      * @throws TelegramException
      * @throws ReflectionException
      */
@@ -54,31 +49,13 @@ class CurrencyCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $logger = App::get('logger');
-        $entityMB = (CurrencyContentStaticFactory::factory(CurrencyContentStaticFactory::MINFIN_MB))->getCurrency('usd');
-//        $entityMB = CurrencyContentStaticFactory::factory(CurrencyContentStaticFactory::MINFIN_BANKS);
-//        $entityBanks = (new Minfin(new Client()))->freshCurrency(Minfin::)->getCurrency('usd');
-
         $text = $message->getText();
         $data = [
             'chat_id' => $chat_id,
-            'text' => $text,
+            'text' => "$ t e x t {$text}",
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
         ];
         return Request::sendMessage($data);
-    }
-
-    public static function getExchangeTextUSDe(
-        CurrencyEntity $entityMB): string
-    {
-        return $text = "
-**Курс USD к UAH**
-**Межбанк**
-Покупка: {$entityMB->getSale()} 
-Продажа: {$entityMB->getBuy()} 
-
-
-Курс валют предоставлен: [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=usd_post)";
     }
 }

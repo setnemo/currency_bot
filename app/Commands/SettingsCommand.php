@@ -7,6 +7,7 @@ use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
 use CurrencyUaBot\Currency\Api\Providers\Minfin;
 use CurrencyUaBot\Currency\CurrencyEntity;
+use CurrencyUaBot\Traits\Cacheable;
 use CurrencyUaBot\Traits\Translatable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -26,7 +27,7 @@ use ReflectionException;
  */
 class SettingsCommand extends UserCommand
 {
-    use Translatable;
+    use Translatable, Cacheable;
 
     /**
      * @var string
@@ -68,10 +69,10 @@ class SettingsCommand extends UserCommand
         $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
         $lang = $config['lang'] ?? 'en';
         $keyboard = new Keyboard(
-            [$this->t('language', $lang), $this->t('inline', $lang)],
-            [$this->t('buttons', $lang), $this->t('menu', $lang)]
+            [$this->t('language', $lang), $this->t('inlinesource', $lang)],
+            [$this->t('buttons', $lang), $this->t('start', $lang)]
         );
-        $text = "Быстрые команды для настроек\n /lang - Сменить язык\n /cccc ....";
+        $text = $this->t('settings_text', $lang);
         $keyboard->setResizeKeyboard(true);
         $data = [
             'chat_id' => $chat_id,

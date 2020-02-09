@@ -41,6 +41,18 @@ class DbRepository
 
     /**
      * @param int $id
+     * @param string $lang
+     */
+    public function updateLanguageCode(int $id, string $lang)
+    {
+        $updateStatement = $this->connection->update(['lang' => $lang])
+            ->table('user_config')
+            ->where('user_id', '=', $id);
+        $affectedRows = $updateStatement->execute();
+    }
+
+    /**
+     * @param int $id
      * @param string|null $lang
      * @return array
      */
@@ -69,5 +81,27 @@ class DbRepository
         $insertStatement->execute(false);
 
         return [$result];
+    }
+
+    /**
+     * @param int $id
+     * @param array $apis
+     */
+    public function updateApiFromConfig(int $id, array $apis)
+    {
+        $selectStatement = $this->connection->select(['inline'])
+            ->from('user_config')
+            ->where('user_id', '=', $id);
+        $stmt = $selectStatement->execute();
+        $fetch = $stmt->fetchAll();
+
+        $result = $fetch[0] ?? [];
+        $newDataString = $result['inline'] ?? '{}';
+        $newData = \GuzzleHttp\json_decode($newDataString, true);
+        $newData['available_api'] = $apis;
+        $updateStatement = $this->connection->update(['inline' => \GuzzleHttp\json_encode($newData)])
+            ->table('user_config')
+            ->where('user_id', '=', $id);
+        $affectedRows = $updateStatement->execute();
     }
 }

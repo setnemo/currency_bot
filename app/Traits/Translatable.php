@@ -22,15 +22,75 @@ trait Translatable
             'uk' => 'Кнопки',
             'ru' => 'Кнопки',
         ],
-        'inline' => [
-            'en' => 'Inline currency',
-            'uk' => 'Валюти у інлайні',
-            'ru' => 'Валюты в инлайне',
+        'inlinesource' => [
+            'en' => 'Inline currency sources',
+            'uk' => 'Джерело валют у інлайні',
+            'ru' => 'Источники валют в инлайне',
         ],
-        'menu' => [
+        'start' => [
             'en' => 'Main menu',
             'uk' => 'Головне меню',
             'ru' => 'Главное меню',
+        ],
+        'english' => [
+            'en' => 'English',
+            'uk' => 'English',
+            'ru' => 'English',
+        ],
+        'ukrainian' => [
+            'en' => 'Українська',
+            'uk' => 'Українська',
+            'ru' => 'Українська',
+        ],
+        'russian' => [
+            'en' => 'Русский',
+            'uk' => 'Русский',
+            'ru' => 'Русский',
+        ],
+        'choice_lang' => [
+            'en' => 'Choose language',
+            'uk' => 'Виберіть мову',
+            'ru' => 'Выберите язык',
+        ],
+        'language_changed' => [
+            'en' => 'Language has been changed',
+            'uk' => 'Мову змінено',
+            'ru' => 'Язык изменен',
+        ],
+        'settings_text' => [
+            'en' => 'Settings menu',
+            'uk' => 'Меню налаштувань',
+            'ru' => 'Меню настроек',
+        ],
+        'choice_inline' => [
+            'en' => 'Select sources currency for inline requests:',
+            'uk' => 'Вибрати джерело валют для інлайн запитів:',
+            'ru' => 'Выбрать источники валют для инлайн запросов:',
+        ],
+        'Monobank' => [
+            'en' => 'Monobank',
+            'uk' => 'Monobank',
+            'ru' => 'Monobank',
+        ],
+        'Minfin:megbank' => [
+            'en' => 'Minfin Interbank',
+            'uk' => 'Minfin межбанк',
+            'ru' => 'Minfin межбанк',
+        ],
+        'remove_api' => [
+            'en' => 'Source removed',
+            'uk' => 'Джерело видалено',
+            'ru' => 'Источник удален',
+        ],
+        'remove_api_denied' => [
+            'en' => 'Can not delete last data source',
+            'uk' => 'Не можна видалити останнє джерело даних',
+            'ru' => 'Нельзя удалить последний источник данных',
+        ],
+        'add_api' => [
+            'en' => 'Source added',
+            'uk' => 'Джерело додано',
+            'ru' => 'Источник добавлен',
         ],
     ];
 
