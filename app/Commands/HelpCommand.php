@@ -25,22 +25,22 @@ use ReflectionException;
  *
  * Gets executed when a user first starts using the bot.
  */
-class SettingsCommand extends UserCommand
+class HelpCommand extends UserCommand
 {
     use Translatable, Cacheable;
 
     /**
      * @var string
      */
-    protected $name = 'Settings';
+    protected $name = 'Help';
     /**
      * @var string
      */
-    protected $description = 'Settings command';
+    protected $description = 'Help command';
     /**
      * @var string
      */
-    protected $usage = '/settings';
+    protected $usage = '/help';
     /**
      * @var string
      */
@@ -68,20 +68,35 @@ class SettingsCommand extends UserCommand
         $userId = $user->getId();
         $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
         $lang = $config['lang'] ?? 'en';
+//        $a = [];
         $keyboard = new Keyboard(
-            [$this->t('language', $lang), $this->t('inlinesource', $lang)],
-            [$this->t('buttons', $lang), $this->t('help', $lang)],
+            [$this->t('help_functionality', $lang), $this->t('help_inlinesource', $lang)],
+            [$this->t('help_buttons', $lang), $this->t('settings', $lang)],
             [$this->t('start', $lang)]
         );
+//        App::get('logger')->error('1', $a);
         $text = $this->t('settings_text', $lang);
         $keyboard->setResizeKeyboard(true);
         $data = [
             'chat_id' => $chat_id,
-            'text' => $text,
+            'text' =>  $this->getHelpText($message->getText()),
             'parse_mode' => 'markdown',
             'disable_web_page_preview' => true,
             'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
+    }
+
+    protected function getHelpText(string $text)
+    {
+        $explode = explode(' ', $text);
+        switch ($explode[1]) {
+            case 'functionality':
+            case 'buttons':
+            case 'inline':
+                return "{$explode[1]}: in development";
+            default:
+                return 'Sorry, in development';
+        }
     }
 }

@@ -60,7 +60,7 @@ class InlinesourceCommand extends UserCommand
         $userId = $this->getMessage()->getFrom()->getId();
         $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
         $lang = $config['lang'] ?? 'en';
-        $inline = \GuzzleHttp\json_decode($config['inline'], true);
+        $inline = json_decode($config['inline'], true);
         $allApis = CurrencyContentStaticFactory::ALLOWED_API;
         $myApis = $inline['available_api'];
         $arg = $this->getKeyboardArgs($allApis, $lang, $userId);

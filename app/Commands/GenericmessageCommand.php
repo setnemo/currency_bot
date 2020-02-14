@@ -29,12 +29,14 @@ class GenericmessageCommand extends SystemCommand
         );
 
         if ($this->isCurrency($text)) {
-            /// need save to cache
             return $this->telegram->executeCommand('Currency');
         }
 
-        if ($text = $this->d($text)) {
-            return $this->telegram->executeCommand($text);
+        if ($command = $this->d($text)) {
+            if (strstr($command, 'help')) {
+                $command = explode('_', $command)[0];
+            }
+            return $this->telegram->executeCommand($command);
         }
 
         $conversation->stop();

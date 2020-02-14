@@ -61,18 +61,18 @@ class DbRepository
         if (!$lang || $lang === 'null') {
             $lang = 'en';
         }
-
+        /** @TODO Save percent for sale-tax */
         $result = [
             $id,
             $lang,
             \GuzzleHttp\json_encode(['USD', 'EUR']),
             \GuzzleHttp\json_encode([
                 'defaultCurrency' => 'usd',
-                'uah' => false,
                 'available_api' => [
                     CurrencyContentStaticFactory::MONOBANK,
                     CurrencyContentStaticFactory::MINFIN_MB,
                 ],
+                'tax' => 0,
             ]),
         ];
         $insertStatement = $this->connection->insert(['user_id', 'lang', 'buttons', 'inline'])
@@ -97,7 +97,7 @@ class DbRepository
 
         $result = $fetch[0] ?? [];
         $newDataString = $result['inline'] ?? '{}';
-        $newData = \GuzzleHttp\json_decode($newDataString, true);
+        $newData = json_decode($newDataString, true);
         $newData['available_api'] = $apis;
         $updateStatement = $this->connection->update(['inline' => \GuzzleHttp\json_encode($newData)])
             ->table('user_config')

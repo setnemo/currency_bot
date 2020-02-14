@@ -2,8 +2,9 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use CurrencyUaBot\Core\Connection;
+use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 
@@ -14,6 +15,7 @@ use Longman\TelegramBot\Request;
  */
 class ButtonsCommand extends UserCommand
 {
+    use Translatable;
     /**
      * @var string
      */
@@ -34,6 +36,7 @@ class ButtonsCommand extends UserCommand
      * @var bool
      */
     protected $private_only = true;
+
     /**
      * Command execute method
      *
@@ -42,30 +45,29 @@ class ButtonsCommand extends UserCommand
      */
     public function execute()
     {
+        $message = $this->getMessage();
+        $chat_id = $message->getChat()->getId();
 
+        $userId = $this->getMessage()->getFrom()->getId();
+        $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+        $lang = $config['lang'] ?? 'en';
+        $buttons = json_decode($config['buttons'], true);
+        $c = count($buttons);
+        $e = 4 - $c;
+        $buttonsText = implode("]\n[", $buttons);
+        $text = "Now buttons: {$c}\n[{$buttonsText}]\n\nMax buttons with currency: 4\nEmpty slots: {$e}";
+        $keyboard = new Keyboard(
+            [$this->t('buttons_add', $lang), $this->t('buttons_remove', $lang)],
+            [$this->t('buttons_reset', $lang), $this->t('settings', $lang)],
+            [$this->t('buttons', $lang)]
+        );
+        $keyboard->setResizeKeyboard(true);
 
-        $switch_element = mt_rand(0, 9) < 5 ? 'true' : 'false';
-        $keyboard = new InlineKeyboard([
-            ['text' => 'inlinesource', 'switch_inline_query' => $switch_element],
-            ['text' => 'inline current chat', 'switch_inline_query_current_chat' => $switch_element],
-        ], [
-            ['text' => 'callback', 'callback_data' => 'identifier'],
-            ['text' => 'open url', 'url' => 'https://github.com/php-telegram-bot/core'],
-        ]);
-//            ->setResizeKeyboard(true)
-//            ->setOneTimeKeyboard(true)
-//            ->setSelective(false)
-        ;
-
-//        $keyboard = Keyboard::remove();
-//        $data = [
-//            'chat_id' => $this->getMessage()->getChat()->getId(),
-//            'text'    => "Кнопки включены.",
-//            'reply_markup' => $keyboard,
-//        ];
         $data = [
-            'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => "Кнопки включены.",
+            'chat_id' => $chat_id,
+            'text' => $text,
+            'parse_mode' => 'html',
+            'disable_web_page_preview' => true,
             'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);

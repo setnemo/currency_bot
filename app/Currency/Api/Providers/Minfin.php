@@ -63,7 +63,7 @@ class Minfin extends ApiWrapper
     protected function formatData(string $data): array
     {
         $array = [];
-        $items = array_reverse(\GuzzleHttp\json_decode($data, true));
+        $items = array_reverse(json_decode($data, true));
 
         foreach ($items as $key => $item) {
             $array[$item['currency'] ?? $key] = $item;

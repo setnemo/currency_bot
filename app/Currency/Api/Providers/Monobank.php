@@ -65,7 +65,7 @@ class Monobank extends ApiWrapper
     protected function formatData(string $data): array
     {
         $array = [];
-        $items = \GuzzleHttp\json_decode($data, true);
+        $items = json_decode($data, true);
 
         foreach ($items as $item) {
             // save only UAH to *** exchange, without USD to EUR, etc.

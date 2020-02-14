@@ -99,7 +99,7 @@ class CallbackqueryCommand extends SystemCommand
         $api = $array[3] ?? 0;
         $config = $this->getConfigFromDb($userId, null);
         $lang = $config['lang'] ?? 'en';
-        $inline = \GuzzleHttp\json_decode($config['inline'], true);
+        $inline = json_decode($config['inline'], true);
         $apis = $inline['available_api'];
         if (in_array($api, $apis)) {
             if (count($apis) === 1) {
@@ -128,7 +128,8 @@ class CallbackqueryCommand extends SystemCommand
     {
         $keyboard = new Keyboard(
             [$this->t('language', $lang), $this->t('inlinesource', $lang)],
-            [$this->t('buttons', $lang), $this->t('start', $lang)]
+            [$this->t('buttons', $lang), $this->t('help', $lang)],
+            [$this->t('start', $lang)]
         );
         $keyboard->setResizeKeyboard(true);
         return $keyboard;
