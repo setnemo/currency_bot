@@ -72,10 +72,25 @@ trait Translatable
             'uk' => '🐈 Monobank',
             'ru' => '🐈 Monobank',
         ],
+        'Privatbank:cash' => [
+            'en' => '🏪 Privatbank cash',
+            'uk' => '🏪 Privatbank готівка',
+            'ru' => '🏪 Privatbank наличные',
+        ],
+        'Privatbank:cards' => [
+            'en' => '🏪 Privatbank cards',
+            'uk' => '🏪 Privatbank карти',
+            'ru' => '🏪 Privatbank карты',
+        ],
+        'NBU' => [
+            'en' => '🇺🇦 National Bank',
+            'uk' => '🇺🇦 Нацбанк',
+            'ru' => '🇺🇦 Нацбанк',
+        ],
         'Minfin:megbank' => [
-            'en' => 'Minfin Interbank',
-            'uk' => 'Minfin межбанк',
-            'ru' => 'Minfin межбанк',
+            'en' => '🏦 Minfin Interbank',
+            'uk' => '🏦 Minfin межбанк',
+            'ru' => '🏦 Minfin межбанк',
         ],
         'remove_api' => [
             'en' => '💔 Source removed',
@@ -112,17 +127,17 @@ trait Translatable
             'uk' => 'Допомога buttons',
             'ru' => 'Помощь buttons',
         ],
-        'buttons_add' => [
+        'buttonsadd' => [
             'en' => '↩️ Add button',
             'uk' => '↩️ Додати кнопку',
             'ru' => '↩️ Добавить кнопку',
         ],
-        'buttons_remove' => [
+        'buttonsremove' => [
             'en' => '↪️ Remove button',
             'uk' => '↪️ Видалити кнопку',
             'ru' => '↪️ Удалить кнопку',
         ],
-        'buttons_reset' => [
+        'buttonsreset' => [
             'en' => '🔄 Reset buttons',
             'uk' => '🔄 Скинути кнопки',
             'ru' => '🔄 Сбросить кнопки',

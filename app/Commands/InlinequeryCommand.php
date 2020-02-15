@@ -2,10 +2,14 @@
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
 
+use CurrencyUaBot\Core\App;
+use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Currency\Api\CurrencyContent;
 use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
+use CurrencyUaBot\Currency\CurrencyEntity;
 use CurrencyUaBot\Message\InlineEntityCreator;
 use CurrencyUaBot\Message\MessageCreator;
+use CurrencyUaBot\Traits\Translatable;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Longman\TelegramBot\Commands\SystemCommand;
@@ -21,6 +25,7 @@ use Longman\TelegramBot\TelegramLog;
  */
 class InlinequeryCommand extends SystemCommand
 {
+    use Translatable;
     /**
      * @var string
      */
@@ -43,14 +48,21 @@ class InlinequeryCommand extends SystemCommand
      */
     public function execute()
     {
+        $userId = $this->getInlineQuery()->getFrom()->getId();
+        $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+        $lang = $config['lang'] ?? 'en';
+        $inline = json_decode($config['inline'], true);
+
+
         $inline_query = $this->getInlineQuery();
         $query = $inline_query->getQuery();
         $data = ['inline_query_id' => $inline_query->getId()];
         $results = [];
-        $case = [
-            CurrencyContentStaticFactory::MONOBANK,
-            CurrencyContentStaticFactory::MINFIN_MB,
-        ]; // @TODO need get from settings_users table;
+        $case = $inline['available_api'];
+//        [
+//            CurrencyContentStaticFactory::MONOBANK,
+//            CurrencyContentStaticFactory::MINFIN_MB,
+//        ]; // @TODO need get from settings_users table;
 
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {
@@ -60,7 +72,7 @@ class InlinequeryCommand extends SystemCommand
                     $currency = trim(strtolower(substr($query, 0, 3)));
                     $query = intval(substr($query, 4));
                 }
-                $this->fillResults($this->getArticles($case, $currency, $query), $results);
+                $this->fillResults($this->getArticles($case, $currency, $query, $lang), $results);
             }
         }
         $data['results'] = '[' . implode(',', $results) . ']';
@@ -83,16 +95,17 @@ class InlinequeryCommand extends SystemCommand
      * @param array $case
      * @param string $curr
      * @param string $query
+     * @param string $lang
      * @return array
      * @throws GuzzleException
      */
-    private function getArticles(array $case, string $curr, string $query): array
+    private function getArticles(array $case, string $curr, string $query, string $lang): array
     {
         $articles = [];
         foreach ($case as $type) {
             try {
-                $entity = CurrencyContentStaticFactory::factory($type);
-                $articles = array_merge($this->fillArticles($curr, $query, $entity), $articles);
+                $entity = CurrencyContentStaticFactory::factory($type)->getCurrency($curr);
+                $articles = array_merge($this->fillArticles($curr, $query, $entity, $lang), $articles);
             } catch (Exception $e) {
                 TelegramLog::notice($e->getMessage());
                 continue;
@@ -104,26 +117,29 @@ class InlinequeryCommand extends SystemCommand
     /**
      * @param string $currency
      * @param string $query
-     * @param CurrencyContent $entity
+     * @param CurrencyEntity $entity
+     * @param string $lang
      * @return array
+     * @throws Exception
      */
-    private function fillArticles(string $currency, string $query, CurrencyContent $entity): array
+    private function fillArticles(string $currency, string $query, CurrencyEntity $entity, string $lang): array
     {
         $pre = ' ' . strtoupper($currency);
         /** @TODO Need refactor */
-        $mb2 = "{$entity->getSourceName()}, продать" . $pre;
-        $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getBuy($currency));
-        $mb1 = "{$entity->getSourceName()}, продать" . $pre;
-        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getBuy($currency));
-        $mb3 = "{$entity->getSourceName()}, купить" . $pre;
-        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getSale($currency));
-        $mb4 = "{$entity->getSourceName()}, купить" . $pre;
-        $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getSale($currency));
+        $sourceName = $this->t($entity->getSource(), $lang);
+        $mb2 = "{$sourceName}, продать" . $pre;
+        $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getBuy());
+//        $mb1 = "{$entity->$this->getSource()}, продать" . $pre;
+//        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getBuy($currency));
+//        $mb3 = "{$entity->$this->getSource()}, купить" . $pre;
+//        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getSale($currency));
+        $mb4 = "{$sourceName}, купить" . $pre;
+        $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getSale());
         return [
             $this->getFillTemplate($mb4, $desc4),
-            $this->getFillTemplate($mb3, $desc3),
+//            $this->getFillTemplate($mb3, $desc3),
             $this->getFillTemplate($mb2, $desc2),
-            $this->getFillTemplate($mb1, $desc1),
+//            $this->getFillTemplate($mb1, $desc1),
         ];
     }
 

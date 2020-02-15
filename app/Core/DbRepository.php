@@ -70,7 +70,8 @@ class DbRepository
                 'defaultCurrency' => 'usd',
                 'available_api' => [
                     CurrencyContentStaticFactory::MONOBANK,
-                    CurrencyContentStaticFactory::MINFIN_MB,
+                    CurrencyContentStaticFactory::PRIVAT_CARDS,
+                    CurrencyContentStaticFactory::PRIVAT_CASH,
                 ],
                 'tax' => 0,
             ]),

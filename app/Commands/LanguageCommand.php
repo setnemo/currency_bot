@@ -61,11 +61,14 @@ class LanguageCommand extends UserCommand
         $userId = $this->getMessage()->getFrom()->getId();
         $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
         $lang = $config['lang'] ?? 'en';
-        $keyboard = new InlineKeyboard([
-            ['text' => $this->t('russian', $lang), 'callback_data' => "change_lang_ru_{$userId}_{$chat_id}"],
+        $keyboard = new InlineKeyboard(
+        [
             ['text' => $this->t('ukrainian', $lang), 'callback_data' => "change_lang_uk_{$userId}_{$chat_id}"],
         ],
-            [['text' => $this->t('english', $lang), 'callback_data' => "change_lang_en_{$userId}_{$chat_id}"]]
+            [
+                ['text' => $this->t('english', $lang), 'callback_data' => "change_lang_en_{$userId}_{$chat_id}"],
+                ['text' => $this->t('russian', $lang), 'callback_data' => "change_lang_ru_{$userId}_{$chat_id}"],
+        ]
         );
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),

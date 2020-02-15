@@ -43,4 +43,9 @@ interface CurrencyContent
      */
     public function getSourceName(): string;
 
+    /**
+     * @return array
+     */
+    public function toArray(): array;
+
 }

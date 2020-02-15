@@ -2,6 +2,7 @@
 
 namespace CurrencyUaBot\Currency\Api\Providers;
 
+use CurrencyUaBot\Core\App;
 use CurrencyUaBot\Currency\Api\ApiWrapper;
 use Exception;
 
@@ -79,4 +80,5 @@ class Minfin extends ApiWrapper
     {
         return $this->host . $this->routes[$source] . $this->token;
     }
+
 }

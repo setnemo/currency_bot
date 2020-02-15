@@ -2,6 +2,7 @@
 
 namespace CurrencyUaBot\Currency\Api;
 
+use CurrencyUaBot\Core\App;
 use CurrencyUaBot\Currency\CurrencyEntity;
 use CurrencyUaBot\Traits\Cacheable;
 use CurrencyUaBot\Traits\Logable;
@@ -32,7 +33,7 @@ abstract class ApiWrapper implements CurrencyContent
      */
     public function __construct(ClientInterface $client, string $sourceName = null)
     {
-        $detailsName = $sourceName ? "_$sourceName" : '';
+        $detailsName = $sourceName ? ":$sourceName" : '';
         $this->client = $client;
         $this->sourceName = $this->getShortName() . $detailsName;
         $this->init();
@@ -120,7 +121,7 @@ abstract class ApiWrapper implements CurrencyContent
             throw new Exception("$name try get currency without require param");
         }
 
-        return new CurrencyEntity($name, $currency, $this->getSale($currency), $this->getBuy($currency));
+        return new CurrencyEntity($this->getSourceName(), $currency, $this->getSale($currency), $this->getBuy($currency));
     }
 
     /**
@@ -129,6 +130,14 @@ abstract class ApiWrapper implements CurrencyContent
     public function getSourceName(): string
     {
         return $this->sourceName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toArray(): array
+    {
+        return $this->getFresh();
     }
 
     /**

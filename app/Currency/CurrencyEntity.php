@@ -61,4 +61,12 @@ class CurrencyEntity
     {
         return $this->source;
     }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
 }

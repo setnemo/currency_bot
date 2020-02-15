@@ -57,8 +57,8 @@ class ButtonsCommand extends UserCommand
         $buttonsText = implode("]\n[", $buttons);
         $text = "Now buttons: {$c}\n[{$buttonsText}]\n\nMax buttons with currency: 4\nEmpty slots: {$e}";
         $keyboard = new Keyboard(
-            [$this->t('buttons_add', $lang), $this->t('buttons_remove', $lang)],
-            [$this->t('buttons_reset', $lang), $this->t('settings', $lang)],
+            [$this->t('buttonsadd', $lang), $this->t('buttonsremove', $lang)],
+            [$this->t('buttonsreset', $lang), $this->t('settings', $lang)],
             [$this->t('buttons', $lang)]
         );
         $keyboard->setResizeKeyboard(true);
