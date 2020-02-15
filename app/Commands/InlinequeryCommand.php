@@ -45,24 +45,14 @@ class InlinequeryCommand extends SystemCommand
      * Command execute method
      *
      * @return bool|ServerResponse
+     * @throws GuzzleException
      */
     public function execute()
     {
-        $userId = $this->getInlineQuery()->getFrom()->getId();
-        $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
-        $lang = $config['lang'] ?? 'en';
-        $inline = json_decode($config['inline'], true);
-
-
         $inline_query = $this->getInlineQuery();
         $query = $inline_query->getQuery();
-        $data = ['inline_query_id' => $inline_query->getId()];
         $results = [];
-        $case = $inline['available_api'];
-//        [
-//            CurrencyContentStaticFactory::MONOBANK,
-//            CurrencyContentStaticFactory::MINFIN_MB,
-//        ]; // @TODO need get from settings_users table;
+        $data = ['inline_query_id' => $inline_query->getId()];
 
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {
@@ -72,6 +62,12 @@ class InlinequeryCommand extends SystemCommand
                     $currency = trim(strtolower(substr($query, 0, 3)));
                     $query = intval(substr($query, 4));
                 }
+                $userId = $inline_query->getFrom()->getId();
+                $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+                $lang = $config['lang'] ?? 'en';
+                $inline = json_decode($config['inline'], true);
+                $case = $inline['available_api'];
+
                 $this->fillResults($this->getArticles($case, $currency, $query, $lang), $results);
             }
         }
@@ -126,14 +122,14 @@ class InlinequeryCommand extends SystemCommand
     {
         $pre = ' ' . strtoupper($currency);
         /** @TODO Need refactor */
-        $sourceName = $this->t($entity->getSource(), $lang);
-        $mb2 = "{$sourceName}, продать" . $pre;
+        $source = $this->t($entity->getSource(), $lang);
+        $mb2 = "{$source}, продать" . $pre;
         $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getBuy());
 //        $mb1 = "{$entity->$this->getSource()}, продать" . $pre;
 //        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getBuy($currency));
 //        $mb3 = "{$entity->$this->getSource()}, купить" . $pre;
 //        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getSale($currency));
-        $mb4 = "{$sourceName}, купить" . $pre;
+        $mb4 = "{$source}, купить" . $pre;
         $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getSale());
         return [
             $this->getFillTemplate($mb4, $desc4),
