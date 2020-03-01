@@ -137,6 +137,11 @@ trait Translatable
             'uk' => '❌ Помилка додавання кнопки ',
             'ru' => '❌ Ошибка добавления кнопки ',
         ],
+        'button_del_error' => [
+            'en' => '❌ Error removing button ',
+            'uk' => '❌ Помилка видалення кнопки ',
+            'ru' => '❌ Ошибка удаления кнопки ',
+        ],
         'buttons_description' => [
             'en' => "To add a button, use the command:\n/buttonsadd EUR\nTo remove a button, use the command:\n/buttonsadd EUR\nWhere EUR is a currency code.\nYour buttons now:\n",
             'uk' => "Щоб додати кнопку, скористайтеся командою:\n/buttonsadd EUR\nЩоб видалити кнопку, скористайтеся командою:\n/buttonsdel EUR\nДе EUR це код валюти.\nВаши кнопки зараз:\n",
@@ -146,6 +151,11 @@ trait Translatable
             'en' => '✅ Button added',
             'uk' => '✅ Кнопка додана',
             'ru' => '✅ Кнопка добавлена',
+        ],
+        'button_del_success' => [
+            'en' => '✅ Button removed',
+            'uk' => '✅ Кнопка видалена',
+            'ru' => '✅ Кнопка удалена',
         ],
         'buttonsremove' => [
             'en' => '↪️ Remove button',
