@@ -127,9 +127,8 @@ class CallbackqueryCommand extends SystemCommand
     private function getSettingsKeyboard(string $lang): Keyboard
     {
         $keyboard = new Keyboard(
-            [$this->t('language', $lang), $this->t('inlinesource', $lang)],
-            [$this->t('buttons', $lang), $this->t('help', $lang)],
-            [$this->t('start', $lang)]
+            [$this->t('language', $lang), $this->t('source', $lang)],
+            [$this->t('buttons', $lang), $this->t('start', $lang)]
         );
         $keyboard->setResizeKeyboard(true);
         return $keyboard;

@@ -69,9 +69,8 @@ class SettingsCommand extends UserCommand
         $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
         $lang = $config['lang'] ?? 'en';
         $keyboard = new Keyboard(
-            [$this->t('language', $lang), $this->t('inlinesource', $lang)],
-            [$this->t('buttons', $lang), $this->t('help', $lang)],
-            [$this->t('start', $lang)]
+            [$this->t('language', $lang), $this->t('source', $lang)],
+            [$this->t('buttons', $lang), $this->t('start', $lang)]
         );
         $text = $this->t('settings_text', $lang);
         $keyboard->setResizeKeyboard(true);

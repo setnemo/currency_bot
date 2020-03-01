@@ -68,9 +68,11 @@ class StartCommand extends SystemCommand
         $user = $message->getFrom();
         $userId = $user->getId();
         $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
-        $lang = $config['lang'] ?? 'en';
+        $prepareButtons = $this->prepareButtons($config);
+        App::get('logger')->critical('butt', $prepareButtons);
+        App::get('logger')->critical('butt', [...$prepareButtons]);
         $keyboard = new Keyboard(
-            array_merge(json_decode($config['buttons']), [$this->t('settings', $lang)])
+            ...$prepareButtons
         );
         $text = json_encode($config);
         $keyboard->setResizeKeyboard(true);
@@ -82,5 +84,27 @@ class StartCommand extends SystemCommand
             'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
+    }
+
+    protected function prepareButtons(array $config): array
+    {
+        $lang = $config['lang'] ?? 'en';
+        $buttons = json_decode($config['buttons'], true);
+        $tmp = [];
+        $arg = [$this->t('settings', $lang)];
+
+        foreach ($buttons as $it => $button) {
+            if (($it + 1) % 3 === 0) {
+                $tmp = array_merge($tmp, [$button]);
+                $arg[] = $tmp;
+                $tmp = [];
+            } else {
+                $tmp = array_merge($tmp, [$button]);
+            }
+        }
+        if (!empty($tmp)) {
+            $arg[] = $tmp;
+        }
+        return $arg;
     }
 }

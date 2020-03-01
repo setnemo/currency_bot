@@ -6,7 +6,6 @@ use CurrencyUaBot\Traits\CurrencyConvertable;
 use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
-use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
 
 class GenericmessageCommand extends SystemCommand
@@ -21,7 +20,6 @@ class GenericmessageCommand extends SystemCommand
     {
         $text = trim($this->getMessage()->getText(true));
 
-        $update = json_decode($this->update->toJson(), true);
         $conversation = new Conversation(
             $this->getMessage()->getFrom()->getId(),
             $this->getMessage()->getChat()->getId(),

@@ -53,6 +53,23 @@ class DbRepository
 
     /**
      * @param int $id
+     * @param array $buttons
+     * @param bool $reset
+     * @return int
+     */
+    public function updateButtons(int $id, array $buttons, bool $reset = false)
+    {
+        if ($reset) {
+            $buttons = ['USD', 'EUR'];
+        }
+        $updateStatement = $this->connection->update(['buttons' => \GuzzleHttp\json_encode($buttons)])
+            ->table('user_config')
+            ->where('user_id', '=', $id);
+        return $updateStatement->execute();
+    }
+
+    /**
+     * @param int $id
      * @param string|null $lang
      * @return array
      */

@@ -1282,5 +1282,13 @@ trait CurrencyConvertable
         }
         return false;
     }
+    protected function getCurrencyCodes(): array
+    {
+        $currencies = [];
+        foreach ($this->currencyCodeMapping as $item) {
+            $currencies = array_merge($currencies, [$item['aCode']]);
+        }
+        return $currencies;
+    }
 
 }

@@ -70,7 +70,7 @@ class HelpCommand extends UserCommand
         $lang = $config['lang'] ?? 'en';
 //        $a = [];
         $keyboard = new Keyboard(
-            [$this->t('help_functionality', $lang), $this->t('help_inlinesource', $lang)],
+            [$this->t('help_functionality', $lang), $this->t('help_source', $lang)],
             [$this->t('help_buttons', $lang), $this->t('settings', $lang)],
             [$this->t('start', $lang)]
         );

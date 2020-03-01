@@ -52,7 +52,10 @@ class InlinequeryCommand extends SystemCommand
         $inline_query = $this->getInlineQuery();
         $query = $inline_query->getQuery();
         $results = [];
-        $data = ['inline_query_id' => $inline_query->getId()];
+        $data = [
+            'inline_query_id' => $inline_query->getId(),
+            'cache_time' => 0,
+        ];
 
         if ($query !== '') {
             if (is_numeric($query) && $query > 0 || intval(substr(trim($query), 4)) > 0) {

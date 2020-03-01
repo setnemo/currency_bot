@@ -53,11 +53,9 @@ class ButtonsCommand extends UserCommand
         $lang = $config['lang'] ?? 'en';
         $buttons = json_decode($config['buttons'], true);
         $c = count($buttons);
-        $e = 4 - $c;
         $buttonsText = implode("]\n[", $buttons);
-        $text = "Now buttons: {$c}\n[{$buttonsText}]\n\nMax buttons with currency: 4\nEmpty slots: {$e}";
+        $text = $this->t('buttons_description', $lang) . "\n[{$buttonsText}]";
         $keyboard = new Keyboard(
-            [$this->t('buttonsadd', $lang), $this->t('buttonsremove', $lang)],
             [$this->t('buttonsreset', $lang), $this->t('settings', $lang)],
             [$this->t('buttons', $lang)]
         );

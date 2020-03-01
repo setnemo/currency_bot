@@ -24,7 +24,7 @@ use ReflectionException;
  *
  * Gets executed when a user first starts using the bot.
  */
-class InlinesourceCommand extends UserCommand
+class SourceCommand extends UserCommand
 {
     use Translatable;
 
@@ -67,7 +67,7 @@ class InlinesourceCommand extends UserCommand
         $keyboard = new InlineKeyboard(...$arg);
         $data = [
             'chat_id' => $this->getMessage()->getChat()->getId(),
-            'text'    => $this->t('choice_inline', $lang) . PHP_EOL . $this->getAvailableCurrencies($myApis, $lang),
+            'text'    => $this->t('choice_source', $lang) . PHP_EOL . $this->getAvailableCurrencies($myApis, $lang),
             'reply_markup' => $keyboard,
         ];
         return Request::sendMessage($data);
@@ -106,6 +106,7 @@ class InlinesourceCommand extends UserCommand
         if (!empty($tmp)) {
             $arg[] = $tmp;
         }
+        $arg[] = [['text' => $this->t('example', $lang), 'switch_inline_query_current_chat' => "EUR 100"]];
         return $arg;
     }
 }
