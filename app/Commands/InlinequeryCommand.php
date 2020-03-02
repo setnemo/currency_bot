@@ -9,6 +9,7 @@ use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
 use CurrencyUaBot\Currency\CurrencyEntity;
 use CurrencyUaBot\Message\InlineEntityCreator;
 use CurrencyUaBot\Message\MessageCreator;
+use CurrencyUaBot\Traits\ConfigAvailable;
 use CurrencyUaBot\Traits\Translatable;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -25,7 +26,7 @@ use Longman\TelegramBot\TelegramLog;
  */
 class InlinequeryCommand extends SystemCommand
 {
-    use Translatable;
+    use Translatable, ConfigAvailable;
     /**
      * @var string
      */
@@ -39,7 +40,7 @@ class InlinequeryCommand extends SystemCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '2.0.0';
 
     /**
      * Command execute method
@@ -65,8 +66,7 @@ class InlinequeryCommand extends SystemCommand
                     $currency = trim(strtolower(substr($query, 0, 3)));
                     $query = intval(substr($query, 4));
                 }
-                $userId = $inline_query->getFrom()->getId();
-                $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+                $config = $this->getConfigFromDb($inline_query->getFrom()->getId(), null);
                 $lang = $config['lang'] ?? 'en';
                 $inline = json_decode($config['inline'], true);
                 $case = $inline['available_api'];
@@ -126,18 +126,18 @@ class InlinequeryCommand extends SystemCommand
         $pre = ' ' . strtoupper($currency);
         /** @TODO Need refactor */
         $source = $this->t($entity->getSource(), $lang);
-        $mb2 = "{$source}, продать" . $pre;
+        $mb2 = "{$source}, " . $this->t('sell', $lang) . $pre;
         $desc2 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getBuy());
 //        $mb1 = "{$entity->$this->getSource()}, продать" . $pre;
 //        $desc1 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getBuy($currency));
 //        $mb3 = "{$entity->$this->getSource()}, купить" . $pre;
 //        $desc3 = MessageCreator::createDivisionMessage($query, 'UAH', strtoupper($currency), $entity->getSale($currency));
-        $mb4 = "{$source}, купить" . $pre;
+        $mb4 = "{$source}, " . $this->t('buy', $lang) . $pre;
         $desc4 = MessageCreator::createMultiplyMessage($query, strtoupper($currency), 'UAH', $entity->getSale());
         return [
-            $this->getFillTemplate($mb4, $desc4),
+            $this->getFillTemplate($mb4, $desc4, $lang),
 //            $this->getFillTemplate($mb3, $desc3),
-            $this->getFillTemplate($mb2, $desc2),
+            $this->getFillTemplate($mb2, $desc2, $lang),
 //            $this->getFillTemplate($mb1, $desc1),
         ];
     }
@@ -145,10 +145,13 @@ class InlinequeryCommand extends SystemCommand
     /**
      * @param string $title
      * @param string $desc
+     * @param string $lang
      * @return InlineQueryResultArticle
      */
-    private function getFillTemplate(string $title, string $desc): InlineQueryResultArticle
+    private function getFillTemplate(string $title, string $desc, string $lang): InlineQueryResultArticle
     {
-        return InlineEntityCreator::getInstance()->fillTemplate($title, $desc, $title . PHP_EOL . $desc);
+        return InlineEntityCreator::getInstance()->fillTemplate(
+            $title, $desc, $title . PHP_EOL . $desc . PHP_EOL . PHP_EOL . $this->t('donat', $lang)
+        );
     }
 }

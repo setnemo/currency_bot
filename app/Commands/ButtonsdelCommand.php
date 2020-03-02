@@ -4,11 +4,10 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 
 use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Core\DbRepository;
-use CurrencyUaBot\Currency\Api\Factory\CurrencyContentStaticFactory;
+use CurrencyUaBot\Traits\ConfigAvailable;
 use CurrencyUaBot\Traits\CurrencyConvertable;
 use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\InlineKeyboard;
 use Longman\TelegramBot\Entities\User;
 use Longman\TelegramBot\Request;
 
@@ -19,7 +18,7 @@ use Longman\TelegramBot\Request;
  */
 class ButtonsdelCommand extends UserCommand
 {
-    use Translatable, CurrencyConvertable;
+    use Translatable, CurrencyConvertable, ConfigAvailable;
 
     protected $name = 'buttons del';
     /**
@@ -33,7 +32,7 @@ class ButtonsdelCommand extends UserCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '2.0.0';
     /**
      * @var bool
      */
@@ -50,17 +49,16 @@ class ButtonsdelCommand extends UserCommand
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $text = $message->getText();
-        $repo = Connection::getRepository();
         /** @var User $user */
         $user = $message->getFrom();
         $userId = $user->getId();
-        $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
+        $config = $this->getConfigFromDb($userId, $user->getLanguageCode());
         $lang = $config['lang'] ?? 'en';
         if (strpos($text, 'buttonsdel')) {
             $arr = explode('buttonsdel', $text);
             if (isset($arr[1])) {
                 $currency = trim(strtoupper($arr[1]));
-                if ($this->isCurrency($currency) && $this->delButton($currency, $repo, $userId, $config)) {
+                if ($this->isCurrency($currency) && $this->delButton($currency, Connection::getRepository(), $userId, $config)) {
                     // add button
                     $text = $this->t('button_del_success', $lang);
                 } else {

@@ -2,7 +2,7 @@
 
 namespace Longman\TelegramBot\Commands\UserCommands;
 
-use CurrencyUaBot\Core\Connection;
+use CurrencyUaBot\Traits\ConfigAvailable;
 use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Entities\Keyboard;
@@ -15,7 +15,7 @@ use Longman\TelegramBot\Request;
  */
 class ButtonsCommand extends UserCommand
 {
-    use Translatable;
+    use Translatable, ConfigAvailable;
     /**
      * @var string
      */
@@ -31,7 +31,7 @@ class ButtonsCommand extends UserCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '2.0.0';
     /**
      * @var bool
      */
@@ -48,16 +48,14 @@ class ButtonsCommand extends UserCommand
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
 
-        $userId = $this->getMessage()->getFrom()->getId();
-        $config = Connection::getRepository()->getConfigByIdOrCreate($userId, null);
+        $config = $this->getConfigFromDb($this->getMessage()->getFrom()->getId());
         $lang = $config['lang'] ?? 'en';
         $buttons = json_decode($config['buttons'], true);
-        $c = count($buttons);
         $buttonsText = implode("]\n[", $buttons);
         $text = $this->t('buttons_description', $lang) . "\n[{$buttonsText}]";
         $keyboard = new Keyboard(
             [$this->t('buttonsreset', $lang), $this->t('settings', $lang)],
-            [$this->t('buttons', $lang)]
+            [$this->t('buttons', $lang), $this->t('start', $lang)]
         );
         $keyboard->setResizeKeyboard(true);
 

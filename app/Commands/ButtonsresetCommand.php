@@ -5,8 +5,7 @@ namespace Longman\TelegramBot\Commands\UserCommands;
 use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Entities\Keyboard;
-use Longman\TelegramBot\Request;
+
 
 /**
  * Start command
@@ -31,7 +30,7 @@ class ButtonsresetCommand extends UserCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '2.0.0';
     /**
      * @var bool
      */
@@ -45,8 +44,7 @@ class ButtonsresetCommand extends UserCommand
      */
     public function execute()
     {
-        $userId = $this->getMessage()->getFrom()->getId();
-        Connection::getRepository()->updateButtons($userId, [], true);
+        Connection::getRepository()->updateButtons($this->getMessage()->getFrom()->getId(), [], true);
         return $this->telegram->executeCommand('Buttons');
     }
 }

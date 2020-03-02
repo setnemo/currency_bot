@@ -39,14 +39,15 @@ trait Cacheable
     /**
      * @param int $userId
      * @param int|null $chatId
+     * @param int $time
      * @return array
      * @throws \Exception
      */
-    public function dataForLanguageUpdateCommand(int $userId, int $chatId = null): array
+    public function dataForLanguageUpdateCommand(int $userId, int $chatId = null, int $time = 300): array
     {
         $key = "update_lang_{$userId}";
         if (!$this->cache()->exists($key)) {
-            $this->cache()->set($key, $chatId, 'EX', 300);
+            $this->cache()->set($key, $chatId, 'EX', $time);
         } else {
             $chatId = $this->cache()->get($key);
         }

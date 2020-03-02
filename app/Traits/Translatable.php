@@ -62,7 +62,7 @@ trait Translatable
             'uk' => '⚙️ Меню налаштувань️',
             'ru' => '⚙️ Меню настроек',
         ],
-        'choice_inline' => [
+        'choice_source' => [
             'en' => 'Select sources currencies:',
             'uk' => 'Вибрати джерело валют:',
             'ru' => 'Выбрать источники валют:',
@@ -171,6 +171,56 @@ trait Translatable
             'en' => 'Example',
             'uk' => 'Приклад',
             'ru' => 'Пример',
+        ],
+        'buy' => [
+            'en' => 'buy',
+            'uk' => 'купити',
+            'ru' => 'купить',
+        ],
+        'sell' => [
+            'en' => 'sell',
+            'uk' => 'продати',
+            'ru' => 'продать',
+        ],
+        'donat' => [
+            'en' => "<a href=\"https://monobank.ua/r/ffYN\">Get a Monobank Credit Card</a>",
+            'uk' => "<a href=\"https://monobank.ua/r/ffYN\">Отримати кредитну карту Монобанка</a>",
+            'ru' => "<a href=\"https://monobank.ua/r/ffYN\">Получить кредитную карту Монобанка</a>",
+        ],
+        'welcome_text' => [
+            'en' => "
+Hello! I can show Ukrainian exchange rates from various sources, which you can choose yourself in the settings.
+
+Also I know how to convert currency to hryvnia in *inline* mode. Just write `@CurrencyUA_bot 1000` in any chat, and I will convert this amount at the dollar current rate! You don’t even need to open a chat with me for this. In addition, you can specify a currency, for example `@CurrencyUA_bot pln 1000`. If the currency is in the sources you selected, I will convert it!
+
+In the chat with me you can find out the exchange rates with the buttons, which you can also choose yourself. In addition, you can write me `EUR 777`, and I will show the euro exchange rate in the amount of 777.
+
+I also support three languages: Ukrainian, English, Russian.
+
+If you have problems with my work - write to my creator, his contacts are in the description.
+",
+            'uk' => "
+Вітаю! Я вмію показувати українські курси валют з різних джерел, які ви можете вибирати самостійно в налаштуваннях.
+
+Також я вмію конвертувати валюту в гривню в режимі *інлайн*. Просто напиши `@CurrencyUA_bot 1000` в будь-якому чаті, і я конвертує цю суму за поточним курсом долару! Для цього навіть не потрібно відкривати чат зі мною. Крім цього можна вказати валюту, наприклад `@CurrencyUA_bot pln 1000`. Якщо валюта є в обраних вами джерелах, я її сконвертую!
+
+У чаті зі мною можна дізнатися курси валют кнопками, які ви теж можете вибирати самостійно. Крім цього ви можете мені написати `EUR 777`, і я покажу курс євро на суму 777.
+
+Так само я підтримую три мови: українська, англійська, російська.
+
+Якщо у тебе будуть проблеми з моєю роботою - пиши моєму творцю, його контакти є в описі.
+",
+            'ru' => "
+Привет! Я умею показывать украинские курсы валют из разных источников, которые вы можете выбирать самостоятельно в настройках.
+
+Также я умею конвертировать валюту в гривну в режиме *инлайн*. Просто напиши `@CurrencyUA_bot 1000` в любом чате, и я сконвертирую эту сумму по текущему курсу доллара! Для этого даже не нужно открывать чат со мной. Кроме этого можно указать валюту, например `@CurrencyUA_bot pln 1000`. Если валюта есть в выбранных вами источниках, я ее сконвертирую!
+
+В диалоге со мной можно узнать курсы валют кнопками, которые вы тоже можете выбирать самостоятельно. Кроме этого вы можете мне написать `EUR 777`, и я покажу курс по сумме 777.
+
+Так же я поддерживаю три языка: украинский, английский, русский.
+
+Если у тебя будут проблемы с моей работой - пиши моему создателю, его контакты есть в описании.
+",
         ],
     ];
 

@@ -22,7 +22,9 @@ abstract class ApiWrapper implements CurrencyContent
     /** @var array */
     protected $fresh = [];
     /** @var string */
-    private $sourceName = '';
+    protected $sourceName = '';
+    /** @var int */
+    protected $TTL = 300;
 
     /**
      * ApiWrapper constructor
@@ -96,7 +98,7 @@ abstract class ApiWrapper implements CurrencyContent
                     ]
                 ]
             )->getBody()->getContents();
-            $this->cache()->set($key, $result, 'EX', 300);
+            $this->cache()->set($key, $result, 'EX', $this->TTL);
         }
         return $result;
     }

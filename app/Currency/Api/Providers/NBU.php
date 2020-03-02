@@ -10,6 +10,7 @@ class NBU extends ApiWrapper
 {
     use CurrencyConvertable;
 
+    protected $TTL = 43200;
     /**
      * @inheritDoc
      * @throws Exception

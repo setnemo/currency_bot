@@ -14,7 +14,7 @@ class GenericmessageCommand extends SystemCommand
 
     protected $name = 'genericmessage';
     protected $description = 'Handle generic message';
-    protected $version = '1.0.0';
+    protected $version = '2.0.0';
 
     public function execute()
     {
@@ -26,7 +26,7 @@ class GenericmessageCommand extends SystemCommand
             $this->getName()
         );
 
-        if ($this->isCurrency($text)) {
+        if ($this->isCurrency($text) || $this->isCurrency(explode(' ', $text)[0] ?? '') ) {
             return $this->telegram->executeCommand('Currency');
         }
 

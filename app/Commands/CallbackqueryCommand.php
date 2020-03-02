@@ -6,10 +6,10 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 
 use CurrencyUaBot\Core\Connection;
 use CurrencyUaBot\Traits\Cacheable;
+use CurrencyUaBot\Traits\ConfigAvailable;
 use CurrencyUaBot\Traits\Translatable;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Entities\Keyboard;
-use Longman\TelegramBot\Entities\User;
 use Longman\TelegramBot\Request;
 
 /**
@@ -21,7 +21,7 @@ use Longman\TelegramBot\Request;
  */
 class CallbackqueryCommand extends SystemCommand
 {
-    use Cacheable, Translatable;
+    use Cacheable, Translatable, ConfigAvailable;
     /**
      * @var string
      */
@@ -35,7 +35,7 @@ class CallbackqueryCommand extends SystemCommand
     /**
      * @var string
      */
-    protected $version = '1.1.1';
+    protected $version = '2.0.0';
 
     /**
      * Command execute method
@@ -134,15 +134,6 @@ class CallbackqueryCommand extends SystemCommand
         return $keyboard;
     }
 
-    /**
-     * @param int $userId
-     * @param string|null $lang
-     * @return array
-     */
-    private function getConfigFromDb(int $userId, ?string $lang): array
-    {
-        return Connection::getRepository()->getConfigByIdOrCreate($userId, $lang);
-    }
 
     /**
      * @param array $array
@@ -173,7 +164,7 @@ class CallbackqueryCommand extends SystemCommand
 
     /**
      * @param int $userId
-     * @param array $api
+     * @param array $apis
      */
     private function updateApiFromConfig(int $userId, array $apis): void
     {

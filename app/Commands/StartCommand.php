@@ -38,7 +38,7 @@ class StartCommand extends SystemCommand
     /**
      * @var string
      */
-    protected $version = '1.1.0';
+    protected $version = '2.0.0';
     /**
      * @var bool
      */
@@ -52,15 +52,6 @@ class StartCommand extends SystemCommand
      */
     public function execute()
     {
-//        $text = "
-//Привет! Я умею показывать курс валют НБУ, межбанка, средний курс в банках. Информацию я беру на сайте [Минфин](https://minfin.com.ua/currency/?utm_source=telegram&utm_medium=USD2UAH_bot&utm_compaign=welcome_post).
-//
-//Также я умею конвертировать доллар в гривну и наоборот в режиме *инлайн*. Просто напиши `@USD2UAH_bot 1000` в любом чате, и я сконвертирую эту сумму по текущему курсу! Для этого даже не нужно открывать чат со мной. Кроме этого можно указать валюту, например `@USD2UAH_bot eur 1000` или `@USD2UAH_bot RUB 1000`
-//
-//В диалоге со мной можно узнать курсы валют \"командой\" валюты, это /usd /eur /rub , или воспользоваться кнопками
-//
-//Если у тебя будут проблемы с моей работой - пиши моему создателю, его контакты есть в описании.
-//";
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
         $repo = Connection::getRepository();
@@ -69,13 +60,11 @@ class StartCommand extends SystemCommand
         $userId = $user->getId();
         $config = $repo->getConfigByIdOrCreate($userId, $user->getLanguageCode());
         $prepareButtons = $this->prepareButtons($config);
-        App::get('logger')->critical('butt', $prepareButtons);
-        App::get('logger')->critical('butt', [...$prepareButtons]);
         $keyboard = new Keyboard(
             ...$prepareButtons
         );
-        $text = json_encode($config);
         $keyboard->setResizeKeyboard(true);
+        $text = $this->t('welcome_text', $config['lang'] ?? 'en');
         $data = [
             'chat_id' => $chat_id,
             'text' => $text,
