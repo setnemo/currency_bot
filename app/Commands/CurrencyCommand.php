@@ -56,7 +56,7 @@ class CurrencyCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $text = $message->getText();
+        $text = strtoupper($message->getText());
         $query = explode(' ', $text)[1] ?? null;
         if ($query) {
             $text = explode(' ', $text)[0];

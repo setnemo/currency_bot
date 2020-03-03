@@ -62,7 +62,7 @@ class SourceCommand extends UserCommand
         $lang = $config['lang'] ?? 'en';
         $inline = json_decode($config['inline'], true);
         $allApis = CurrencyContentStaticFactory::ALLOWED_API;
-        $myApis = $inline['available_api'];
+        $myApis = array_filter($inline['available_api']);
         $arg = $this->getKeyboardArgs($allApis, $lang, $userId);
         $keyboard = new InlineKeyboard(...$arg);
         $data = [

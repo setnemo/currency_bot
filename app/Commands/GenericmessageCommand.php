@@ -26,7 +26,7 @@ class GenericmessageCommand extends SystemCommand
             $this->getName()
         );
 
-        if ($this->isCurrency($text) || $this->isCurrency(explode(' ', $text)[0] ?? '') ) {
+        if ($this->isCurrency(strtoupper($text)) || $this->isCurrency(strtoupper(explode(' ', $text)[0] ?? ''))) {
             return $this->telegram->executeCommand('Currency');
         }
 
