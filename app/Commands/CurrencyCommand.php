@@ -56,10 +56,17 @@ class CurrencyCommand extends UserCommand
     {
         $message = $this->getMessage();
         $chat_id = $message->getChat()->getId();
-        $text = strtoupper($message->getText());
-        $query = explode(' ', $text)[1] ?? null;
+        $text = $string = strtoupper($message->getText());
+        $query = explode(' ', $string)[1] ?? null;
         if ($query) {
-            $text = explode(' ', $text)[0];
+            if (is_numeric(explode(' ', $string)[0])) {
+                $text = explode(' ', $string)[1];
+                $query = explode(' ', $string)[0];
+            }
+            if (is_numeric(explode(' ', $string)[1])) {
+                $text = explode(' ', $string)[0];
+                $query = explode(' ', $string)[1];
+            }
         }
         $config = $this->getConfigFromDb($this->getMessage()->getFrom()->getId(), null);
         $lang = $config['lang'] ?? 'en';
