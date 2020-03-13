@@ -95,7 +95,7 @@ class SourceCommand extends UserCommand
     {
         $tmp = $arg = [];
         foreach ($allApis as $it => $api) {
-            if ($it % 2 === 0) {
+            if (($it + 1) % 2 === 0) {
                 $tmp[] = ['text' => $this->t($api, $lang), 'callback_data' => "change_inline_{$userId}_{$api}"];
                 $arg[] = $tmp;
                 $tmp = [];

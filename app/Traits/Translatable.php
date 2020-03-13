@@ -82,6 +82,11 @@ trait Translatable
             'uk' => '🏪 Privatbank карти',
             'ru' => '🏪 Privatbank карты',
         ],
+        'PrivatbankOtp24' => [
+            'en' => '🏪 Privatbank for business',
+            'uk' => '🏪 Privatbank для бізнесу',
+            'ru' => '🏪 Privatbank для бизнеса',
+        ],
         'NBU' => [
             'en' => '🇺🇦 National Bank',
             'uk' => '🇺🇦 Нацбанк',
@@ -182,16 +187,16 @@ trait Translatable
             'uk' => 'продати',
             'ru' => 'продать',
         ],
-        'donat' => [
-            'en' => "",
-            'uk' => "",
-            'ru' => "",
-        ],
 //        'donat' => [
-//            'en' => "<a href=\"https://monobank.ua/r/ffYN\">Get a Monobank Credit Card</a>",
-//            'uk' => "<a href=\"https://monobank.ua/r/ffYN\">Отримати кредитну карту Монобанка</a>",
-//            'ru' => "<a href=\"https://monobank.ua/r/ffYN\">Получить кредитную карту Монобанка</a>",
+//            'en' => "",
+//            'uk' => "",
+//            'ru' => "",
 //        ],
+        'donat' => [
+            'en' => "<a href=\"https://monobank.ua/r/ffYN\">Get a Monobank Credit Card</a>",
+            'uk' => "<a href=\"https://monobank.ua/r/ffYN\">Отримати кредитну карту Монобанка</a>",
+            'ru' => "<a href=\"https://monobank.ua/r/ffYN\">Получить кредитную карту Монобанка</a>",
+        ],
         'welcome_text' => [
             'en' => "
 Hello! I can show Ukrainian exchange rates from various sources, which you can choose yourself in the settings.

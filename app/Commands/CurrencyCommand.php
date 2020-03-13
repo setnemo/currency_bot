@@ -67,6 +67,8 @@ class CurrencyCommand extends UserCommand
                 $text = explode(' ', $string)[0];
                 $query = explode(' ', $string)[1];
             }
+        } else {
+            $query = 1;
         }
         $config = $this->getConfigFromDb($this->getMessage()->getFrom()->getId(), null);
         $lang = $config['lang'] ?? 'en';
