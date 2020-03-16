@@ -148,9 +148,9 @@ trait Translatable
             'ru' => '❌ Ошибка удаления кнопки ',
         ],
         'buttons_description' => [
-            'en' => "To add a button, use the command:\n/buttonsadd EUR\nTo remove a button, use the command:\n/buttonsadd EUR\nWhere EUR is a currency code.\nYour buttons now:\n",
+            'en' => "To add a button, use the command:\n/buttonsadd EUR\nTo remove a button, use the command:\n/buttonsdel EUR\nWhere EUR is a currency code.\nYour buttons now:\n",
             'uk' => "Щоб додати кнопку, скористайтеся командою:\n/buttonsadd EUR\nЩоб видалити кнопку, скористайтеся командою:\n/buttonsdel EUR\nДе EUR це код валюти.\nВаши кнопки зараз:\n",
-            'ru' => "Чтобы добавить кнопку, используйте команду:\n/buttonsadd EUR\nЧтобы удалить кнопку, используйте команду:\n/buttonsadd EUR\nГде EUR это код валюты.\nВаши кнопки сейчас:\n",
+            'ru' => "Чтобы добавить кнопку, используйте команду:\n/buttonsadd EUR\nЧтобы удалить кнопку, используйте команду:\n/buttonsdel EUR\nГде EUR это код валюты.\nВаши кнопки сейчас:\n",
         ],
         'button_add_success' => [
             'en' => '✅ Button added',
