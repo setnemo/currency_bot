@@ -110,10 +110,12 @@ class CallbackqueryCommand extends SystemCommand
                     unset($apis[$it]);
                 }
             }
+            $apis = array_filter($apis);
             $this->updateApiFromConfig($userId, $apis);
             $text .= $this->t('remove_api', $lang);
         } else {
             $apis = array_merge($apis, [$api]);
+            $apis = array_filter($apis);
             $this->updateApiFromConfig($userId, $apis);
             $text .= $this->t('add_api', $lang);
         }

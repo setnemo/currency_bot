@@ -62,7 +62,7 @@ class SourceCommand extends UserCommand
         $lang = $config['lang'] ?? 'en';
         $inline = json_decode($config['inline'], true);
         $allApis = CurrencyContentStaticFactory::ALLOWED_API;
-        $myApis = $inline['available_api'];
+        $myApis = array_filter($inline['available_api']);
         $arg = $this->getKeyboardArgs($allApis, $lang, $userId);
         $keyboard = new InlineKeyboard(...$arg);
         $data = [
@@ -95,7 +95,7 @@ class SourceCommand extends UserCommand
     {
         $tmp = $arg = [];
         foreach ($allApis as $it => $api) {
-            if ($it % 2 === 0) {
+            if (($it + 1) % 2 === 0) {
                 $tmp[] = ['text' => $this->t($api, $lang), 'callback_data' => "change_inline_{$userId}_{$api}"];
                 $arg[] = $tmp;
                 $tmp = [];

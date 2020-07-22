@@ -70,6 +70,7 @@ class InlinequeryCommand extends SystemCommand
                 $lang = $config['lang'] ?? 'en';
                 $inline = json_decode($config['inline'], true);
                 $case = $inline['available_api'];
+                $case = array_filter($case);
 
                 $this->fillResults($this->getArticles($case, $currency, $query, $lang), $results);
             }

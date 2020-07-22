@@ -8,6 +8,7 @@ use CurrencyUaBot\Currency\Api\Providers\Minfin;
 use CurrencyUaBot\Currency\Api\Providers\Monobank;
 use CurrencyUaBot\Currency\Api\Providers\NBU;
 use CurrencyUaBot\Currency\Api\Providers\Privatbank;
+use CurrencyUaBot\Currency\Api\Providers\PrivatbankOtp24;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -20,6 +21,7 @@ final class CurrencyContentStaticFactory
     public const MINFIN_MB = 'Minfin:megbank';
     public const PRIVAT_CASH = 'Privatbank:cash';
     public const PRIVAT_CARDS = 'Privatbank:cards';
+    public const PRIVAT_OTP24 = 'PrivatbankOtp24';
 
     public const ALLOWED_API = [
         self::MONOBANK,
@@ -27,6 +29,7 @@ final class CurrencyContentStaticFactory
         self::NBU,
         self::PRIVAT_CASH,
         self::PRIVAT_CARDS,
+        self::PRIVAT_OTP24,
     ];
 
     /**
@@ -52,6 +55,8 @@ final class CurrencyContentStaticFactory
             return (new Privatbank($client, Privatbank::CASH))->freshCurrency(Privatbank::CASH);
         }  elseif ($type === self::PRIVAT_CARDS) {
             return (new Privatbank($client, Privatbank::CARDS))->freshCurrency(Privatbank::CARDS);
+        }  elseif ($type === self::PRIVAT_OTP24) {
+            return (new PrivatbankOtp24($client))->freshCurrency();
         } elseif ($type === self::NBU) {
             return (new NBU($client))->freshCurrency();
         }

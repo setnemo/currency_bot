@@ -62,7 +62,7 @@ class DbRepository
         if ($reset) {
             $buttons = ['USD', 'EUR'];
         }
-        $updateStatement = $this->connection->update(['buttons' => \GuzzleHttp\json_encode($buttons)])
+        $updateStatement = $this->connection->update(['buttons' => json_encode($buttons)])
             ->table('user_config')
             ->where('user_id', '=', $id);
         return $updateStatement->execute();
@@ -82,8 +82,8 @@ class DbRepository
         $result = [
             $id,
             $lang,
-            \GuzzleHttp\json_encode(['USD', 'EUR']),
-            \GuzzleHttp\json_encode([
+            json_encode(['USD', 'EUR']),
+            json_encode([
                 'defaultCurrency' => 'usd',
                 'available_api' => [
                     CurrencyContentStaticFactory::MONOBANK,
@@ -116,8 +116,8 @@ class DbRepository
         $result = $fetch[0] ?? [];
         $newDataString = $result['inline'] ?? '{}';
         $newData = json_decode($newDataString, true);
-        $newData['available_api'] = $apis;
-        $updateStatement = $this->connection->update(['inline' => \GuzzleHttp\json_encode($newData)])
+        $newData['available_api'] = [...array_filter($apis)];
+        $updateStatement = $this->connection->update(['inline' => json_encode($newData)])
             ->table('user_config')
             ->where('user_id', '=', $id);
         $affectedRows = $updateStatement->execute();
