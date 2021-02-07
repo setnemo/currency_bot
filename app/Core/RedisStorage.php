@@ -19,7 +19,7 @@ class RedisStorage
     public static function getInstance()
     {
         if (static::$redis === null) {
-            self::$redis = new Client();
+            self::$redis = new Client(['host' => 'redis']);
         }
         return static::$redis;
     }
