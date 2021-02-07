@@ -54,7 +54,8 @@ COPY --chown=www-data:www-data . /app
 VOLUME ["/app"]
 
 WORKDIR /app
-
+# Change current user to www
+USER www-data
 RUN composer install
 
 EXPOSE 9000
