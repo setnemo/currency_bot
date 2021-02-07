@@ -24,9 +24,6 @@ services:
     restart: always
     volumes:
       - .:/app/
-    links:
-      - mysql
-      - redis
     networks:
       - tier
 
