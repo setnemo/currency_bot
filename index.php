@@ -13,7 +13,11 @@ $tg = App::get('tg');
 echo json_encode(['check' => true]);
 $expectedTime = time() + 10 * 60;
 while (true) {
-    $tg->run();
+    try {
+        $tg->run();
+    } catch (Throwable $t) {
+        App::get('logger')->error( $t->getMessage(), $t->getTrace());;
+    }
     if ($expectedTime <= time()) {
         die(0);
     }
