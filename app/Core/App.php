@@ -42,7 +42,8 @@ class App
          * Init Telegram
          */
         try {
-            (new TelegramWrapper($projectPath, $token, $botName, $logger))->init();
+            $tg = (new TelegramWrapper($projectPath, $token, $botName, $logger))->init();
+            App::bind('tg', $tg);
         } catch (TelegramException $e) {
             // Log telegram errors
             TelegramLog::error($e);
