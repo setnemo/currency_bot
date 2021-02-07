@@ -43,7 +43,7 @@ class TelegramWrapper
      * @throws TelegramException
      * @throws Exception
      */
-    public function init(): self
+    public function init(): void
     {
         $this->bot = new Telegram($this->token, $this->botName);
         $this->register($this->botName);
@@ -54,14 +54,10 @@ class TelegramWrapper
         ]);
 
         $this->bot->enableExternalMySql(App::get('db'));
-//        $this->bot->enableLimiter();
-        return $this;
-    }
-    
-    public function run()
-    {
+        $this->bot->enableLimiter();
         $this->bot->handle();
     }
+
     /**
      * @param string $prefix
      * @throws Exception
