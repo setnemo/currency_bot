@@ -67,7 +67,7 @@ class TelegramWrapper
         $key = $prefix . '_registered';
         if (!$this->cache()->exists($key)) {
             try {
-                $hook_url = "https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+                $hook_url = "https://" . getenv('HOST');
                 $result = $this->bot->setWebhook($hook_url);
                 if ($result->isOk()) {
                     $this->cache()->set($key, $result->getDescription());
