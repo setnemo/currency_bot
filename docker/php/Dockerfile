@@ -38,25 +38,17 @@ RUN docker-php-ext-enable pdo_mysql
 RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
         && pecl install redis \
         && docker-php-ext-enable redis.so
-
 # Install PHP Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 # Remove Cache
 RUN rm -rf /var/cache/apk/*
-
 # Add UID '1000' to www-data
 RUN usermod -u 1000 www-data
-
 # Copy existing application directory permissions
 COPY --chown=www-data:www-data . /app
-
-VOLUME ["/app"]
-
-WORKDIR /app
-# Change current user to www
 USER www-data
+VOLUME ["/app"]
+WORKDIR /app
 RUN composer install
-
 EXPOSE 9000
 
