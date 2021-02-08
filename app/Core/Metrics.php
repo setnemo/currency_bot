@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use CurrencyUaBot\Core\Singleton;
+namespace CurrencyUaBot\Core;
+
 use Prometheus\CollectorRegistry;
 use Prometheus\Exception\MetricsRegistrationException;
 use Prometheus\Storage\Redis;
