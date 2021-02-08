@@ -12,11 +12,11 @@ services:
     volumes:
       - .:/app/
     links:
-      - php
+      - currency
     networks:
       - tier
 
-  php:
+  currency:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
