@@ -8,6 +8,7 @@ use Exception;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\TelegramLog;
+use Metrics;
 use Monolog\Logger;
 
 class TelegramWrapper
@@ -56,6 +57,7 @@ class TelegramWrapper
         $this->bot->enableExternalMySql(App::get('db'));
         $this->bot->enableLimiter();
         $this->bot->handle();
+        Metrics::getInstance()->increaseHealthCheck('currency');
     }
 
     /**

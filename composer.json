@@ -6,7 +6,8 @@
         "predis/predis": "^1.1",
         "ext-json": "*",
         "slim/pdo": "^1.10",
-        "paquettg/php-html-parser": "^2.2"
+        "paquettg/php-html-parser": "^2.2",
+        "endclothing/prometheus_client_php": "^1.0"
     },
     "autoload": {
         "psr-4": {
