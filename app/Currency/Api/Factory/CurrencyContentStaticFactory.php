@@ -25,7 +25,7 @@ final class CurrencyContentStaticFactory
 
     public const ALLOWED_API = [
         self::MONOBANK,
-        self::MINFIN_MB,
+//        self::MINFIN_MB,
         self::NBU,
         self::PRIVAT_CASH,
         self::PRIVAT_CARDS,
@@ -49,8 +49,8 @@ final class CurrencyContentStaticFactory
 
         if ($type === self::MONOBANK) {
             return (new Monobank($client))->freshCurrency();
-        } elseif ($type === self::MINFIN_MB) {
-            return (new Minfin($client, Minfin::MB))->freshCurrency(Minfin::MB);
+//        } elseif ($type === self::MINFIN_MB) {
+//            return (new Minfin($client, Minfin::MB))->freshCurrency(Minfin::MB);
         }  elseif ($type === self::PRIVAT_CASH) {
             return (new Privatbank($client, Privatbank::CASH))->freshCurrency(Privatbank::CASH);
         }  elseif ($type === self::PRIVAT_CARDS) {

@@ -11,6 +11,7 @@ use Prometheus\Storage\Redis;
 class Metrics extends Singleton
 {
     private const METRIC_HEALTH_CHECK_PREFIX = 'healthcheck_';
+    const METRIC_USAGE_PREFIX = 'usage_';
     /**
      * @var CollectorRegistry
      */
@@ -59,5 +60,15 @@ class Metrics extends Singleton
     public function increaseHealthCheck(string $serverName): void
     {
         $this->increaseMetric(self::METRIC_HEALTH_CHECK_PREFIX . $serverName);
+    }
+    
+    /**
+     * @param string $serverName
+     *
+     * @throws MetricsRegistrationException
+     */
+    public function increaseUsage(string $serverName): void
+    {
+        $this->increaseMetric(self::METRIC_USAGE_PREFIX . $serverName);
     }
 }

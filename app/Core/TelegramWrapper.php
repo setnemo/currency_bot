@@ -55,7 +55,7 @@ class TelegramWrapper
 
         $this->bot->enableExternalMySql(App::get('db'));
         $this->bot->handle();
-        Metrics::getInstance()->increaseHealthCheck('currency');
+        Metrics::getInstance()->increaseUsage('currency');
     }
 
     /**
