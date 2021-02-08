@@ -8,7 +8,6 @@ use Exception;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\TelegramLog;
-use Metrics;
 use Monolog\Logger;
 
 class TelegramWrapper
