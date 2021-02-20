@@ -193,9 +193,9 @@ trait Translatable
 //            'ru' => "",
 //        ],
         'donat' => [
-            'en' => "<a href=\"https://monobank.ua/r/ffYN\">Get a Monobank Credit Card</a>",
-            'uk' => "<a href=\"https://monobank.ua/r/ffYN\">Отримати кредитну карту Монобанка</a>",
-            'ru' => "<a href=\"https://monobank.ua/r/ffYN\">Получить кредитную карту Монобанка</a>",
+            'en' => "<a href=\"https://monobank.ua/r/ffYN\">Get a Monobank Credit Card</a><br><br>Learn English Words @RepeatWordBot",
+            'uk' => "<a href=\"https://monobank.ua/r/ffYN\">Отримати кредитну карту Монобанка</a><br><br>Вчити англійські слова@RepeatWordBot",
+            'ru' => "<a href=\"https://monobank.ua/r/ffYN\">Получить кредитную карту Монобанка</a><br><br>Учить английские слова @RepeatWordBot",
         ],
         'welcome_text' => [
             'en' => "
